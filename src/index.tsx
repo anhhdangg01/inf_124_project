@@ -1,15 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import App from './App';
+import Home from './pages/home';
+import Auth from './pages/auth';
 import reportWebVitals from './reportWebVitals';
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+// Firebase configuration
+// Note: In a production environment, these values should be stored in environment variables
+const firebaseConfig = {
+  apiKey: "AIzaSyDb0vGZ7bvxqfXoKxmJzf7htUYrfKF31kA",
+  authDomain: "inf-124-10961.firebaseapp.com",
+  projectId: "inf-124-10961",
+  storageBucket: "inf-124-10961.firebasestorage.app",
+  messagingSenderId: "1038932690190",
+  appId: "1:1038932690190:web:00f9afc8f98149e5fe435f",
+  measurementId: "G-ME18D21GQY"
+};
+
+// Initialize Firebase before rendering the app
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

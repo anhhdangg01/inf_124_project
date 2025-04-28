@@ -1,0 +1,117 @@
+/* Header styles */
+.header {
+  background-color: #222222;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-right: 70px; /* 40px to the right of the title */
+}
+
+.logo-image {
+  width: 250px;
+  height: auto;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #222222;
+  border: 1px solid #ffffff;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  width: 300px;
+  margin-right: auto; /* Push user section to the right */
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 1rem;
+  background: transparent;
+  color: #ffffff;
+}
+
+.search-input::placeholder {
+  color: #BBBBBB;
+}
+
+.user-section {
+  position: relative;
+  margin-right: 40px; /* Reduced from 90px to bring it closer to the right edge */
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.user-info:hover {
+  background-color: #666666;
+}
+
+.username {
+  margin-right: 0.5rem;
+  color: #ffffff;
+}
+
+.user-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.user-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #222222;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  min-width: 120px;
+  border: 1px solid #444444;
+}
+
+.sign-out-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  color: #d32f2f;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.sign-out-button:hover {
+  background-color: #f5f5f5;
+} 
