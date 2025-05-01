@@ -8,6 +8,7 @@ import Auth from './pages/auth';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import Discussion from './pages/discussion';
 
 // Firebase configuration
 // Note: In a production environment, these values should be stored in environment variables
@@ -35,6 +36,7 @@ root.render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/discussion" element={<Discussion />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
