@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import '../App.css';
 import Header from '../components/header/header';
+import Footer from '../components/footer/footer';
 
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,9 +37,10 @@ function Home() {
       <Header />
       <h1>Vision bucket home</h1>
       <p>Your personal vision board application</p>
-      
+      <Footer />
     </div>
   );
+
 }
 
 export default Home;

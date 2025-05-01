@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/auth.css';
 import loginOptions from '../assets/login.png'
 import visionBucket from '../assets/VisionBucket.png'
+import Footer from '../components/footer/footer';
 
 function Auth() {
   const [email, setEmail] = useState('');
@@ -84,7 +85,9 @@ function Auth() {
           <img src={loginOptions} alt="Login Options" style={{ width: '450px', height: 'auto' }}/>
         </div>
       </div>
+      <Footer />
     </div>
+
   );
 }
 
