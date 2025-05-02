@@ -60,6 +60,12 @@ function Header() {
             Go to Discussion
           </Link>
         </div>
+        <div className="temp_home-button-container">
+          <Link to="/" className="temp_home-button">
+            temp_Home_button
+          </Link>
+        </div>  
+
         <div className="user-section">
           <div className="user-info" onClick={toggleUserMenu}>
             <span className="username">{email}</span>

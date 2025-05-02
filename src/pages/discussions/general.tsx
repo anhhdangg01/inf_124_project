@@ -8,6 +8,7 @@ function GeneralDiscussion() {
     <div className="discussion-page">
       <Header />
       <div className="discussion-container">
+        <p> those who discuss</p>
       </div>
       <Footer />
     </div>
