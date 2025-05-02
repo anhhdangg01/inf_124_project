@@ -8,6 +8,10 @@ import Auth from './pages/auth';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import Discussion from './pages/discussion';
+import GeneralDiscussion from './pages/discussions/general';
+import News from './pages/discussions/news';
+import Rules from './pages/discussions/rules';
 
 // Firebase configuration
 // Note: In a production environment, these values should be stored in environment variables
@@ -35,6 +39,10 @@ root.render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/discussion" element={<Discussion />} />
+        <Route path="/discussion/general" element={<GeneralDiscussion />} />
+        <Route path="/discussion/news" element={<News />} />
+        <Route path="/discussion/rules" element={<Rules />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

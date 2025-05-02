@@ -37,6 +37,9 @@ function Home() {
       <Header />
       <h1>Vision bucket home</h1>
       <p>Your personal vision board application</p>
+      <Link to="/discussion" style={{ textDecoration: 'none', color: '#3498db', fontSize: '20px' }}>
+      Go to Discussion
+    </Link>
       <Footer />
     </div>
   );
