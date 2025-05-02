@@ -1,7 +1,7 @@
-import '../../styles/profile.css';
-import user_icon from '../../assets/userIcon.png';
-import mail_icon from '../../assets/mail_icon.png';
-import friend_request_icon from '../../assets/friend_request_icon.png';
+import '../../../styles/profile.css';
+import user_icon from '../../../assets/userIcon.png';
+import mail_icon from '../../../assets/mail_icon.png';
+import friend_request_icon from '../../../assets/friend_request_icon.png';
 
 
 function UserStats() {

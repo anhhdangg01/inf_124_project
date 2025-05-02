@@ -27,6 +27,10 @@ function Header() {
     return () => unsubscribe();
   }, [auth, navigate]);
 
+  const handleProfile = async () => {
+    navigate('/profile');
+  };
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -73,6 +77,9 @@ function Header() {
           </div>
           {showUserMenu && (
             <div className="user-menu">
+              <button onClick={handleProfile} className="option-button">
+                Profile
+              </button>
               <button onClick={handleSignOut} className="sign-out-button">
                 Sign Out
               </button>
