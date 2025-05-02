@@ -35,6 +35,7 @@ function Home() {
   return (
     <div className="App">
       <Header />
+      <div style={{marginTop: '100px'}}></div>
       <h1>Vision bucket home</h1>
       <p>Your personal vision board application</p>
       <Link to="/discussion" style={{ textDecoration: 'none', color: '#3498db', fontSize: '20px' }}>

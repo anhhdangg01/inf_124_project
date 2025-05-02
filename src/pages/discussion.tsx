@@ -8,6 +8,7 @@ function Discussion() {
   return (
     <div className="discussion-page">
       <Header />
+      <div style={{marginTop: '100px'}}></div>
       <div className="discussion-container">
         <h1>Discussion Board</h1>
         <p>Welcome to the discussion board! Choose a section below:</p>
