@@ -35,7 +35,7 @@
   background-color: #222222;
   border: 1px solid #ffffff;
   border-radius: 20px;
-  padding: 0.5rem 1rem;
+  padding: 1px 10px;
   width: 300px;
   margin-right: auto; /* Push user section to the right */
 }
@@ -47,12 +47,13 @@
 }
 
 .search-input {
-  border: none;
-  outline: none;
   width: 100%;
+  border: none !important;
+  outline: none;
   font-size: 1rem;
   background: transparent;
   color: #ffffff;
+  padding: 0;
 }
 
 .search-input::placeholder {
