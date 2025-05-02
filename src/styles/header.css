@@ -148,3 +148,8 @@
   border-radius: 4px;
   transition: background-color 0.2s;
 }
+
+.option-button:hover {
+  background-color: #f5f5f5;
+  color: #222222;
+}

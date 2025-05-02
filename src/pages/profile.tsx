@@ -17,11 +17,18 @@ function Profile() {
         <div className="App">
             <Header />
             <h1>Testuser123's profile</h1>
-            <UserStats />
-            <TVShowStats />
-            <MovieStats />
-            <TVShowHistory />
-            <MovieHistory />
+            <div className="stats">
+                <UserStats />
+                <div className="stats-panel">
+                    <TVShowStats />
+                    <MovieStats />
+                </div>
+            </div>
+
+            <div className="history-panel">
+                <TVShowHistory />
+                <MovieHistory />
+            </div>
             <Footer />
         </div>
     );
