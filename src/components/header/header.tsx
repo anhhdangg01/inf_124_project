@@ -31,6 +31,11 @@ function Header() {
     navigate('/profile');
   };
 
+  const handeldiscussion = async () => {
+    navigate('/discussion');
+  };
+
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -48,10 +53,9 @@ function Header() {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <Link to="/home">
+          <Link to="/">
             <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
           </Link>
-          <Link to="/home" className="logo-text"></Link>
         </div>
         
         <div className="search-container">
@@ -72,6 +76,9 @@ function Header() {
             <div className="user-menu">
               <button onClick={handleProfile} className="option-button">
                 Profile
+              </button>
+              <button onClick={handeldiscussion} className="option-button">
+                Discussion
               </button>
               <button onClick={handleSignOut} className="sign-out-button">
                 Sign Out
