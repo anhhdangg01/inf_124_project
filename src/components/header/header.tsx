@@ -27,6 +27,15 @@ function Header() {
     return () => unsubscribe();
   }, [auth, navigate]);
 
+  const handleProfile = async () => {
+    navigate('/profile');
+  };
+
+  const handeldiscussion = async () => {
+    navigate('/discussion');
+  };
+
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -44,7 +53,9 @@ function Header() {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
+          <Link to="/">
+            <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
+          </Link>
         </div>
         
         <div className="search-container">
@@ -55,16 +66,6 @@ function Header() {
             className="search-input"
           />
         </div>
-        <div className="discussion-button-container">
-          <Link to="/discussion" className="discussion-button">
-            Go to Discussion
-          </Link>
-        </div>
-        <div className="temp_home-button-container">
-          <Link to="/" className="temp_home-button">
-            temp_Home_button
-          </Link>
-        </div>  
 
         <div className="user-section">
           <div className="user-info" onClick={toggleUserMenu}>
@@ -73,6 +74,12 @@ function Header() {
           </div>
           {showUserMenu && (
             <div className="user-menu">
+              <button onClick={handleProfile} className="option-button">
+                Profile
+              </button>
+              <button onClick={handeldiscussion} className="option-button">
+                Discussion
+              </button>
               <button onClick={handleSignOut} className="sign-out-button">
                 Sign Out
               </button>

@@ -1,4 +1,4 @@
-import '../../styles/profile.css';
+import '../../../styles/profile.css';
 
 function MovieStats() {
     return (

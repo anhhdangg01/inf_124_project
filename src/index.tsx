@@ -12,6 +12,7 @@ import Discussion from './pages/discussion';
 import GeneralDiscussion from './pages/discussions/general';
 import News from './pages/discussions/news';
 import Rules from './pages/discussions/rules';
+import Profile from './pages/profile';
 
 // Firebase configuration
 // Note: In a production environment, these values should be stored in environment variables
@@ -43,6 +44,7 @@ root.render(
         <Route path="/discussion/general" element={<GeneralDiscussion />} />
         <Route path="/discussion/news" element={<News />} />
         <Route path="/discussion/rules" element={<Rules />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -1,5 +1,8 @@
 import React from 'react';
 import VisionBucket from '../../assets/VisionBucket.png';
+import Facebook from '../../assets/facebook.png';
+import Instagram from '../../assets/instagram.png';
+import Twitter from '../../assets/twitter.png';
 import '../../styles/footer.css';
 
 const Footer = () => {
@@ -19,9 +22,9 @@ const Footer = () => {
         </div>
         
         <div className="footer-social">
-          <a href="https://www.facebook.com/" target="_blank"><i className="social-icon">FB</i></a>
-          <a href="https://x.com/home" target="_blank"><i className="social-icon">TW</i></a>
-          <a href="https://www.instagram.com/" target="_blank"><i className="social-icon">IG</i></a>
+          <a href="https://www.facebook.com/" target="_blank"><i className="social-icon"><img src={Facebook} alt="Facebook" /></i></a>
+          <a href="https://x.com/home" target="_blank"><i className="social-icon"><img src={Twitter} alt="Twitter" /></i></a>
+          <a href="https://www.instagram.com/" target="_blank"><i className="social-icon"><img src={Instagram} alt="Instagram" /></i></a>
         </div>
       </div>
       
