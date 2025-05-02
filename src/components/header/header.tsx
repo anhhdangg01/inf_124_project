@@ -44,7 +44,10 @@ function Header() {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
+          <Link to="/home">
+            <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
+          </Link>
+          <Link to="/home" className="logo-text"></Link>
         </div>
         
         <div className="search-container">
@@ -55,16 +58,6 @@ function Header() {
             className="search-input"
           />
         </div>
-        <div className="discussion-button-container">
-          <Link to="/discussion" className="discussion-button">
-            Go to Discussion
-          </Link>
-        </div>
-        <div className="temp_home-button-container">
-          <Link to="/" className="temp_home-button">
-            temp_Home_button
-          </Link>
-        </div>  
 
         <div className="user-section">
           <div className="user-info" onClick={toggleUserMenu}>
@@ -73,6 +66,13 @@ function Header() {
           </div>
           {showUserMenu && (
             <div className="user-menu">
+
+              <button 
+                onClick={() => navigate('/discussion')} 
+                className="disc-button"
+              >
+                Discussions
+              </button> 
               <button onClick={handleSignOut} className="sign-out-button">
                 Sign Out
               </button>

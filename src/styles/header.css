@@ -136,3 +136,19 @@
 .discussion-button:hover {
   background-color: #210F37;
 }
+
+.disc-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.disc-button:hover {
+  background-color: #f5f5f5;
+} 
