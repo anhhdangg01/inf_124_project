@@ -10,6 +10,7 @@ import VisionBucket from '../../assets/VisionBucket.png';
 function Header() {
   const [email, setEmail] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -31,6 +32,11 @@ function Header() {
     navigate('/profile');
   };
 
+  const handeldiscussion = async () => {
+    navigate('/discussion');
+  };
+
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -44,24 +50,32 @@ function Header() {
     setShowUserMenu(!showUserMenu);
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search-result/${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <Link to="/home">
+          <Link to="/">
             <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
           </Link>
-          <Link to="/home" className="logo-text"></Link>
         </div>
         
-        <div className="search-container">
+        <form className="search-container" onSubmit={handleSearch}>
           <img src={searchIcon} alt="Search" className="search-icon" />
           <input 
             type="text" 
             placeholder="Search..." 
             className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </div>
+        </form>
 
         <div className="user-section">
           <div className="user-info" onClick={toggleUserMenu}>
@@ -72,6 +86,9 @@ function Header() {
             <div className="user-menu">
               <button onClick={handleProfile} className="option-button">
                 Profile
+              </button>
+              <button onClick={handeldiscussion} className="option-button">
+                Discussion
               </button>
               <button onClick={handleSignOut} className="sign-out-button">
                 Sign Out

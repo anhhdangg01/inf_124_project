@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { searchMovies, Movie } from '../functions/api_service';
 import '../App.css';
 import Header from '../components/header/header';
 import Footer from '../components/footer/footer';
@@ -8,43 +9,87 @@ import Footer from '../components/footer/footer';
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const navigate = useNavigate();
   const auth = getAuth();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in
         setIsLoggedIn(true);
       } else {
-        // User is signed out, redirect to auth page
         navigate('/auth');
       }
       setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [auth, navigate]);
 
-  // Show loading state while checking authentication
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await searchMovies('minecraft');
+        setMovies(response.results);
+      } catch (err) {
+        setError('Failed to fetch movies');
+        console.error(err);
+      }
+    };
+
+    fetchMovies();
+  }, []);
+
   if (loading) {
-    return <div className="App" style={{ marginTop: '100px', fontSize: '35px' }}>Loading...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="App">
       <Header />
-      <div style={{marginTop: '100px'}}></div>
-      <h1>Vision bucket home</h1>
-      <p>Your personal vision board application</p>
-      <Link to="/discussion" style={{ textDecoration: 'none', color: '#3498db', fontSize: '20px' }}>
-      Go to Discussion
-    </Link>
+      <main>
+        <h1>Welcome to Vision Bucket</h1>
+        <Link 
+          to="/discussion" 
+          style={{ 
+            textDecoration: 'none', 
+            color: '#3498db', 
+            fontSize: '20px',
+            display: 'block',
+            margin: '20px 0'
+          }}
+        >
+          Go to Discussion
+        </Link>
+
+        <div className="movies-container">
+          <h2>Minecraft Movies</h2>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <div className="movies-grid">
+            {movies.map((movie) => (
+              <div 
+                key={movie.id} 
+                className="movie-card"
+                onClick={() => console.log('Movie Data:', movie)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img 
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                  alt={movie.title}
+                  style={{ width: '200px', height: '300px', objectFit: 'cover' }}
+                />
+                <h3>{movie.title}</h3>
+                <p>{movie.release_date}</p>
+                <p>Rating: {movie.vote_average}/10</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
       <Footer />
     </div>
   );
-
 }
 
 export default Home;

@@ -17,7 +17,7 @@ function Auth() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
     try {
       if (isLogin) {
         // Sign in
@@ -55,7 +55,7 @@ function Auth() {
                 required
               />
             </div>
-            
+
             <div>
               <label htmlFor="password">Password:</label>
               <input
@@ -66,10 +66,10 @@ function Auth() {
                 required
               />
             </div>
-            
+
             <button type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
           </form>
-          
+
           <p>
             {isLogin ? "Don't have an account?" : "Already have an account?"}
             <button 
@@ -80,7 +80,7 @@ function Auth() {
             </button>
           </p>
         </div>
-        
+
         <div className="auth-image">
           <img src={loginOptions} alt="Login Options" style={{ width: '450px', height: 'auto' }}/>
         </div>
