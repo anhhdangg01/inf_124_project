@@ -19,10 +19,12 @@ function Discussion() {
           <Link to="/discussion/news" className="discussion-card">
             <h2>News</h2>
             <p>Stay updated with the latest news.</p>
+            <p>Recent news post can go here.</p>
           </Link>
           <Link to="/discussion/general" className="discussion-card">
             <h2>General Discussion</h2>
             <p>Join the conversation and share your thoughts.</p>
+            <p>Recent discussion post can go here.</p>
           </Link>
         </div>
       </div>
