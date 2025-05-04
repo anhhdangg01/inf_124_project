@@ -1,0 +1,33 @@
+.discussion-preview_background {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.discussion-preview {
+    width: 100%; /* Stretch to the full width of the screen */
+    height: auto; /* Adjust height dynamically based on content */
+    color: white;
+    display: flex;
+    flex-direction: column; /* Stack child elements vertically */
+    align-items: flex-start; /* Align items to the left */
+    text-align: left;
+    justify-content: center;
+    font-size: 12px;
+    border-radius: 12px;
+}
+
+.discussion-preview:hover {
+    background-color: #1e1e1e; /* Slightly darker background on hover */
+    color: #ffffff;
+    cursor: pointer;
+ 
+}
+.preview-card {
+    width: 95%; /* Increase the width to make it wider */
+    max-width: 1200px; /* Allow a larger maximum width */
+    color: white;
+    border-radius: 6px; /* Keep slightly rounded corners */
+    transform: skew(0); /* Keep the box straight */
+    text-align: left; /* Align text to the left */
+}

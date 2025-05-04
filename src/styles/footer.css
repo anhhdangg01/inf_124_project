@@ -9,6 +9,8 @@
     position: relative; 
     z-index: 1;
     box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1); /* idk if this loook good ROFL */
+    padding-top: 2rem; /* Add padding to the top */
+    
   }
   
   /* Main content area */

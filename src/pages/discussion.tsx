@@ -29,6 +29,7 @@ function Discussion() {
           </Link>
         </div>
       </div>
+      
       <Footer />
     </div>
   );
