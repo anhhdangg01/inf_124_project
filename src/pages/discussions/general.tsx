@@ -4,6 +4,7 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
 import DiscussionPreviews from '../../components/discussion/post_preview';
+import threadsData from '../../data/threads.json'; // Import the JSON file
 
 function GeneralDiscussion() {
   const [thread, setThread] = useState('');
@@ -14,14 +15,6 @@ function GeneralDiscussion() {
     console.log({ thread });
     setThread('');
   };
-
-  const exampleThreads = [
-    { id: '1', title: 'Which Character Had the Best Development Arc?', description: 'Some characters start off one way and end up completely....', date: '2023-10-01', author: 'User123' },
-    { id: '2', title: 'What’s the Most Overrated or Underrated Episode?', description: 'Are there any you think don’t deserve the hype?', date: '2023-10-01', author: 'User123'  },
-    { id: '3', title: 'Who’s the Most Hated (But Necessary) Character?"', description: 'Which one do you prefer and why?', date: '2023-10-01', author: 'User123'   },
-    { id: '4', title: 'What’s a Show That’s So Bad It’s Good?', description: 'Sometimes terrible writing, acting, or plot twists....', date: '2023-10-01', author: 'User123'   },
-    { id: '5', title: 'If Two Shows Had a Crossover, What Would It Be?', description: 'Imagine two totally different shows merging....', date: '2023-10-01', author: 'User123'   },
-  ];
 
   return (
     <div className="discussion-page">
@@ -50,7 +43,7 @@ function GeneralDiscussion() {
             <button className="create-thread-btn">CREATE THREAD</button>
           </form>
         </main>
-        <DiscussionPreviews threads={exampleThreads} />
+        <DiscussionPreviews threads={threadsData} /> {/* Use the imported JSON data */}
       </div>
       <Footer />
     </div>

@@ -7,7 +7,6 @@ import { Link, useParams } from 'react-router-dom';
 function ThreadDetails() {
   const { id } = useParams();
 
-
   interface Thread {
     title: string;
     description: string;

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "6",
+    "title": "Breaking: Major Update Released!",
+    "description": "A new update has been released, bringing exciting features.",
+    "date": "2023-10-01",
+    "author": "Admin"
+  },
+  {
+    "id": "7",
+    "title": "Community Event Announced",
+    "description": "Join us for a special event happening this weekend.",
+    "date": "2023-10-02",
+    "author": "Moderator"
+  },
+  {
+    "id": "8",
+    "title": "Maintenance Scheduled",
+    "description": "The platform will undergo maintenance on 2023-10-05.",
+    "date": "2023-10-03",
+    "author": "Admin"
+  },
+  {
+    "id": "9",
+    "title": "New Features Coming Soon",
+    "description": "Here’s a sneak peek at the upcoming features.",
+    "date": "2023-10-04",
+    "author": "Developer"
+  },
+  {
+    "id": "10",
+    "title": "Survey: Share Your Feedback",
+    "description": "We’d love to hear your thoughts on the platform.",
+    "date": "2023-10-05",
+    "author": "Community Team"
+  }
+]

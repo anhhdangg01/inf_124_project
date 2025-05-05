@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
-import { Link } from 'react-router-dom';
+import DiscussionPreviews from '../../components/discussion/post_preview';
+import threadsData from '../../data/threads_news.json'; // Import the JSON file
 
 function News() {
+  const [thread, setThread] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ thread });
+    setThread('');
+  };
+
   return (
     <div className="discussion-page">
       <Header />
       <div className="discussion-container">
-        {/* Breadcrumb Navigation */}
         <nav className="breadcrumb">
-          <Link to="/discussions" className="breadcrumb-link">Discussion</Link>
+          <Link to="/discussion" className="breadcrumb-link">Discussion</Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <span className="breadcrumb-current">News</span>
+          <span className="breadcrumb-current">General</span>
         </nav>
-
-        <h1>News</h1>
+        <h1> News</h1>
+        <DiscussionPreviews threads={threadsData} /> {/* Use the imported JSON data */}
       </div>
       <Footer />
     </div>
