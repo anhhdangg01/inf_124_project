@@ -1,4 +1,4 @@
-function Dropdown() {
+function WatchTypeDropdown() {
     return(
         <div className="dropdown">
             
@@ -6,4 +6,4 @@ function Dropdown() {
     );
 }
 
-export default Dropdown;
+export default WatchTypeDropdown;

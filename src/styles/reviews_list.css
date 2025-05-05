@@ -1,3 +1,38 @@
 .search-filter {
-    
+
+}
+
+.film-type-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #222222;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    min-width: 120px;
+    border: 1px solid #444444;
+}
+
+.film-type-dropdown-option {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    color: white;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.watch-type-dropdown {
+
+}
+
+.search-filter-icons {
+    width: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
