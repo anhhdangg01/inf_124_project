@@ -1,47 +1,81 @@
-.user-stats {
-    width: 20%;
-    padding: 10px;
-    margin: 10px;
-    background-color: white;
-    font-size: 1rem;
+/* Profile styles */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+    /* gap: 40px; */
+    margin-top: 20px;
+    margin-bottom: 100px;
 }
 
-/* Profile styles */
 .profile-picture {
-    width: 250px;
+    width: 200px;
     height: auto;
+    margin: 20px;
 }
 
 .profile-image {
-    width: 150px;
+    width: 70px;
     height: auto;
+    margin: 10px;
 }
 
 .profile-image:hover {
     background-color: #666666;
 }
 
+.user-card {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 20px;
+}
+
+.stats-card {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 20px;
+}
+
 .stats-panel {
-    border: 2px #C9C9C9;
-    background-color: white;
-    padding: 10px;
-    width: 70%;
-    margin: 10px;
-    font-size: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+    gap: 40px;
+    margin-top: 20px;
+    margin-bottom: 100px;
 }
 
 .history-panel {
-    border: 2px #C9C9C9;
-    background-color: white;
-    padding: 10px;
-    width: 90%;
-    margin: 10px;
+    background-color: #333333;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 70%;
 }
 
-.film-info {
-    margin: 5px;
-    background-color: white;
-    padding: 5px;
-    width: 10%;
+.circle-picture {
+    width: 15px;
+    margin-right: 10px;
+}
+
+h2 {
     font-size: 1.5rem;
+    text-align: center;
+}
+
+p {
+    font-size: 1.2rem;
+    text-align: left;
 }
