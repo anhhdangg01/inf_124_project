@@ -43,7 +43,7 @@ function GeneralDiscussion() {
             <button className="create-thread-btn">CREATE THREAD</button>
           </form>
         </main>
-        <DiscussionPreviews threads={threadsData} /> {/* Use the imported JSON data */}
+        <DiscussionPreviews threads={threadsData} />
       </div>
       <Footer />
     </div>

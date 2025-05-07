@@ -54,17 +54,6 @@
     margin-bottom: 100px;
 }
 
-.history-panel {
-    background-color: #333333;
-    color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s, box-shadow 0.3s;
-    width: 70%;
-}
-
 .circle-picture {
     width: 15px;
     margin-right: 10px;
@@ -79,3 +68,56 @@ p {
     font-size: 1.2rem;
     text-align: left;
 }
+
+.tv-show-history,
+.movie-history {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 20px;
+}
+
+.movies-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+.movie-card {
+    flex: 0 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s;
+    text-align: center;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.movie-card h3 {
+    margin: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.movie-card p {
+    margin: 5px 10px;
+    font-size: 14px;
+    color: #666;
+}
+
