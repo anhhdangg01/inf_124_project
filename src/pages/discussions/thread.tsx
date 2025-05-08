@@ -3,37 +3,46 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
 import { Link, useParams } from 'react-router-dom';
+import threadsData from '../../data/threads.json'; // Import the JSON file
+import NewsaData from '../../data/threads_news.json'; // Import the JSON file
 
 function ThreadDetails() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+
+  interface Comment {
+    id: string;
+    text: string;
+    author: string;
+  }
 
   interface Thread {
+    id: string;
     title: string;
     description: string;
     author: string;
     createdAt: string;
+    comments: Comment[];
   }
 
   const [thread, setThread] = useState<Thread | null>(null);
 
   useEffect(() => {
-    const fetchThreadDetails = async () => {
-      try {
-        const response = await fetch(`/api/threads/${id}`);
-        const data = await response.json();
-        setThread(data);
-      } catch (err) {
-        console.error('Failed to fetch thread details:', err);
-      }
-    };
-
-    fetchThreadDetails();
+    // Find the thread by ID from the JSON file
+    const foundThread = threadsData.find((thread) => thread.id === id || thread.id === id) || NewsaData.find((thread) => thread.id === id || thread.id === id);
+    if (foundThread) {
+      setThread({
+        ...foundThread,
+        createdAt: foundThread.date,
+      });
+    } else {
+      setThread(null);
+    }
   }, [id]);
 
   if (!thread) {
     return <div>Loading...</div>;
   }
- {/* implementation kinda */}
+
   return (
     <div className="discussion-page">
       <Header />
@@ -46,9 +55,23 @@ function ThreadDetails() {
         </nav>
 
         <h1>{thread.title}</h1>
-        <p>{thread.description}</p>
         <p>Created by: {thread.author}</p>
+        <p>{thread.description}</p>
         <p>Created at: {thread.createdAt}</p>
+
+        {/* Render Comments */}
+        <div className="comments-section">
+          <h2>Comments</h2>
+          {thread.comments.length > 0 ? (
+            thread.comments.map((comment) => (
+              <div key={comment.id} className="comment">
+                <p><strong>{comment.author}:</strong> {comment.text}</p>
+              </div>
+            ))
+          ) : (
+            <p>No comments yet.</p>
+          )}
+        </div>
       </div>
       <Footer />
     </div>

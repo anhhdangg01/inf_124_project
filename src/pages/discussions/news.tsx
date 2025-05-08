@@ -4,7 +4,7 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
 import DiscussionPreviews from '../../components/discussion/post_preview';
-import threadsData from '../../data/threads_news.json'; // Import the JSON file
+import threadsData from '../../data/threads_news.json';
 
 function News() {
   const [thread, setThread] = useState('');
@@ -26,7 +26,7 @@ function News() {
           <span className="breadcrumb-current">General</span>
         </nav>
         <h1> News</h1>
-        <DiscussionPreviews threads={threadsData} /> {/* Use the imported JSON data */}
+        <DiscussionPreviews threads={threadsData} />
       </div>
       <Footer />
     </div>
