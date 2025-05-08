@@ -1,0 +1,61 @@
+.movie-details {
+    max-width: 800px;
+    margin: 100px auto; /* Adds space at the top and centers horizontally */
+    padding: 20px;
+    color: #ffffff;
+    background-color: #1c1c1c; /* Dark background for contrast */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+}
+
+.movie-top-section {
+    display: flex; /* Align poster and details side by side */
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.movie-poster {
+    flex: 0 0 300px;
+    text-align: left;
+}
+
+.movie-poster img {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
+
+.movie-details-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #e0e0e0;
+}
+
+.movie-details-info p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.movie-overview,
+.other-reviews {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.movie-overview h2,
+.other-reviews h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.movie-overview p,
+.other-reviews p {
+    font-size: 1rem;
+    line-height: 1.6;
+}

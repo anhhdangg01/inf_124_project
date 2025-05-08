@@ -16,7 +16,6 @@ function Profile() {
     return(
         <div className="App">
             <Header />
-            <h1>Testuser123's profile</h1>
             <div className="stats-section">
                 <UserStats />
                 <div className="stats-panel">

@@ -6,6 +6,7 @@ import '../App.css';
 import Header from '../components/header/header';
 import Footer from '../components/footer/footer';
 
+
 function SearchResults() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -15,6 +16,10 @@ function SearchResults() {
     const auth = getAuth();
     const { query } = useParams();
   
+    const handleCardClick = (id: number) => {
+      navigate(`/show/${id}`); // Navigate to the movie details page
+  };
+
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -59,8 +64,11 @@ function SearchResults() {
               {movies.map((movie) => (
                 <div 
                   key={movie.id} 
+                  onClick={() => {
+                    console.log('Movie Data:', movie);
+                    handleCardClick(movie.id);
+                  }}
                   className="movie-card"
-                  onClick={() => console.log('Movie Data:', movie)}
                   style={{ cursor: 'pointer' }}
                 >
                   <img 

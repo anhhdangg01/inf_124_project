@@ -45,6 +45,9 @@ function Home() {
     return <div>Loading...</div>;
   }
 
+    const handleCardClick = (id: number) => {
+      navigate(`/show/${id}`); // Navigate to the movie details page
+  };
   return (
     <div className="App">
       <Header />
@@ -70,8 +73,12 @@ function Home() {
             {movies.map((movie) => (
               <div 
                 key={movie.id} 
+                
                 className="movie-card"
-                onClick={() => console.log('Movie Data:', movie)}
+                onClick={() => {
+                  console.log('Movie Data:', movie);
+                  handleCardClick(movie.id);
+                }}
                 style={{ cursor: 'pointer' }}
               >
                 <img 
