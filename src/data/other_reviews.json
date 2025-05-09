@@ -1,0 +1,65 @@
+[
+{
+    "movie": 950387,
+    "reviews": [
+        {
+            "review": "I was really looking forward to this movie, but it was a huge disappointment. The plot was all over the place and the characters were one-dimensional. I wouldn't recommend it to anyone.",
+            "rating": 2,
+            "author": "User123"
+        },
+        {
+            "review": "The special effects were impressive, but the story was lacking. It felt like they were trying too hard to be edgy and it just didn't work for me.",
+            "rating": 3,
+            "author": "Steve"
+            
+        }
+    ]
+},
+{
+    "movie": 597,
+    "reviews": [
+        {
+            "review": "This movie was a breath of fresh air! The characters were relatable and the story was engaging. I loved every minute of it.",
+            "rating": 5,
+            "author": "JaneDoe"
+        },
+        {
+            "review": "I didn't think it was as good as everyone said. It had its moments, but overall it felt like it dragged on too long.",
+            "rating": 3,
+            "author": "JohnSmith"
+        }
+    ]
+},
+{
+    "movie": 5559,
+    "reviews": [
+        {
+            "review": "An absolute masterpiece! The cinematography was stunning and the acting was top-notch. I can't recommend it enough!",
+            "rating": 5,
+            "author": "FilmBuff"
+        },
+        {
+            "review": "I found the pacing to be slow and the plot convoluted. It had potential, but ultimately fell flat for me.",
+            "rating": 2,
+            "author": "Critic101"
+        },
+        {
+            "review": "A solid film with great performances. It kept me engaged from start to finish.",
+            "rating": 4,
+            "author": "MovieLover"
+        },
+        {
+            "review": "I was really disappointed with this one. The characters were unlikable and the plot was predictable.",
+            "rating": 1,
+            "author": "DisappointedViewer"
+        },  
+        {
+            "review": "A beautiful story about love and loss. The performances were heartfelt and the direction was superb.",
+            "rating": 5,
+            "author": "Cinephile"
+        }
+    ]
+}
+
+
+]

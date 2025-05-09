@@ -17,7 +17,7 @@ function GeneralDiscussion() {
   // Load threads from localStorage on component mount
   useEffect(() => {
     const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
-    setThreads([...threadsData, ...localThreads]); // Combine JSON and localStorage threads
+    setThreads([...threadsData, ...localThreads]);
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {

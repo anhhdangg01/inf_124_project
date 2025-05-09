@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ReactNode } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
@@ -28,12 +27,18 @@ function ThreadDetails() {
   const [thread, setThread] = useState<Thread | null>(null);
 
   useEffect(() => {
-    // Find the thread by ID from the JSON file
-    const foundThread = threadsData.find((thread) => thread.id === id || thread.id === id) || NewsaData.find((thread) => thread.id === id || thread.id === id);
+    // Load threads from localStorage
+    const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
+
+    // Combine threads from JSON files and localStorage
+    const allThreads = [...threadsData, ...NewsaData, ...localThreads];
+
+    // Find the thread by ID
+    const foundThread = allThreads.find((thread) => thread.id === id);
     if (foundThread) {
       setThread({
         ...foundThread,
-        createdAt: foundThread.date,
+        createdAt: foundThread.date || new Date().toISOString().split('T')[0],
       });
     } else {
       setThread(null);
