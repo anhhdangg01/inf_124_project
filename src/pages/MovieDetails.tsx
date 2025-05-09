@@ -5,7 +5,6 @@ import '../styles/MovieDetails.css';
 import Header from '../components/header/header';
 import Footer from '../components/footer/footer';
 
-
 function MovieDetails() {
     const { id } = useParams<{ id: string }>(); // Get the movie ID from the URL
     const [movie, setMovie] = useState<Movie | null>(null);
@@ -24,6 +23,22 @@ function MovieDetails() {
 
         fetchMovie();
     }, [id]);
+
+    const handleAddToLocalStorage = () => {
+        if (id) {
+            // Retrieve the existing list from localStorage
+            const existingMovies = localStorage.getItem('movies');
+            let moviesList = existingMovies ? JSON.parse(existingMovies) : [];
+            // Check if the ID is already in the list
+            if (!moviesList.includes(id)) {
+                moviesList.push(id);
+                localStorage.setItem('movies', JSON.stringify(moviesList));
+                alert(`Movie ID ${id} added to the list in localStorage!`);
+            } else {
+                alert(`Movie ID ${id} is already in the list!`);
+            }
+        }
+    };
 
     if (error) {
         return <p style={{ color: 'red' }}>{error}</p>;
@@ -49,6 +64,9 @@ function MovieDetails() {
                         <p><strong>Release Date:</strong> {movie.release_date}</p>
                         <p><strong>Average Rating:</strong> {movie.vote_average}/10</p>
                         {/* Add more movie details as needed */}
+                        <button onClick={handleAddToLocalStorage}>
+                            Add To Watched List  (Currently only Movie History)
+                        </button>
                     </div>
                 </div>
                 <div className="movie-overview">

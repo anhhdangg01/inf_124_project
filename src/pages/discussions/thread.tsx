@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
@@ -49,7 +50,9 @@ function ThreadDetails() {
       <div className="discussion-container">
         {/* Breadcrumb Navigation */}
         <nav className="breadcrumb">
-          <Link to="/discussions" className="breadcrumb-link">Discussion</Link>
+          <Link to="/discussion" className="breadcrumb-link">Discussion</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+          <Link to="/discussion/general" className="breadcrumb-link">General</Link>
           <span className="breadcrumb-separator"> &gt; </span>
           <span className="breadcrumb-current">{thread.title}</span>
         </nav>

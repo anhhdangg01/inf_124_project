@@ -8,6 +8,7 @@ import Footer from '../components/footer/footer';
 
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -23,7 +24,7 @@ function Home() {
       }
       setLoading(false);
     });
-
+      
     return () => unsubscribe();
   }, [auth, navigate]);
 
@@ -41,6 +42,43 @@ function Home() {
     fetchMovies();
   }, []);
 
+  useEffect(() => {
+    const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const extractedUsername = user.email?.split('@')[0] || 'Unknown User';
+            setUsername(extractedUsername);
+        } else {
+            setUsername(null);
+        }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    
+    if (!localStorage.getItem('username')) {
+      localStorage.setItem('username', JSON.stringify(username));
+    }
+    if (!localStorage.getItem('movies')) {
+      localStorage.setItem('movies', JSON.stringify([950387, 5559, 284908,950387, 5559, 284908,950387, 5559, 284908,950387, 5559, 284908]));
+    }
+    if (!localStorage.getItem('shows')) {
+      localStorage.setItem('shows', JSON.stringify([950387, 5559, 284908]));
+    }
+    if (!localStorage.getItem('reviews')) {
+      localStorage.setItem(
+        'reviews',
+        JSON.stringify([
+          { movieId: 950387, review: "review", rating: 1 },
+          { movieId: 5559, review: "review2", rating: 5 }
+        ])
+      );
+    }
+  }, []);
+
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -53,18 +91,6 @@ function Home() {
       <Header />
       <main>
         <h1>Welcome to Vision Bucket</h1>
-        <Link 
-          to="/discussion" 
-          style={{ 
-            textDecoration: 'none', 
-            color: '#3498db', 
-            fontSize: '20px',
-            display: 'block',
-            margin: '20px 0'
-          }}
-        >
-          Go to Discussion
-        </Link>
 
         <div className="movies-container">
           <h2>Minecraft Movies</h2>

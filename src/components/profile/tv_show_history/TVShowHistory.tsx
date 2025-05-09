@@ -9,7 +9,7 @@ function MovieHistory() {
     const navigate = useNavigate(); // Hook for navigation
 
     // Example watched movie IDs. Replace these with actual IDs from your database or API.
-    const watchedMovieIds = [950387, 5559, 284908,950387, 5559, 284908,950387, 5559, 284908,950387, 5559, 284908]; // Replace with actual movie IDs
+    const watchedMovieIds = JSON.parse(localStorage.getItem('shows') || '[]');// Replace with actual movie IDs
 
     useEffect(() => {
         const fetchMovies = async () => {
