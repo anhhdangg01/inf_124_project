@@ -28,6 +28,15 @@ export interface MovieSearchResponse {
   total_results: number;
 }
 
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface GenreListResponse {
+  genres: Genre[];
+}
+
 export const searchMovies = async (query: string, page: number = 1): Promise<MovieSearchResponse> => {
   try {
     const response = await axiosInstance.get('/search/movie', {
@@ -64,6 +73,33 @@ export const getPopularMovies = async (page: number = 1): Promise<MovieSearchRes
     return response.data;
   } catch (error) {
     console.error('Error getting popular movies:', error);
+    throw error;
+  }
+};
+
+export const getGenres = async (): Promise<GenreListResponse> => {
+  try {
+    const response = await axiosInstance.get('/genre/movie/list');
+    return response.data;
+  } catch (error) {
+    console.error('Error getting movie genres:', error);
+    throw error;
+  }
+};
+
+export const getMoviesByGenre = async (genreId: number, page: number = 1): Promise<MovieSearchResponse> => {
+  try {
+    const response = await axiosInstance.get('/discover/movie', {
+      params: {
+        with_genres: genreId,
+        page,
+        include_adult: false,
+        sort_by: 'popularity.desc',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error getting movies by genre:', error);
     throw error;
   }
 };

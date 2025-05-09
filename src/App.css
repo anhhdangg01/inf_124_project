@@ -9,6 +9,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 .App {
@@ -16,6 +22,8 @@ body {
   background-color: #222222;
   color: #ffffff;
   padding-top: 80px; /* Add padding to account for the fixed header */
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .App-logo {
@@ -119,8 +127,18 @@ body {
 
 .movies-container {
   padding: 20px;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #222222;
+  overflow-x: hidden;
+}
+
+main {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 .movies-grid {
@@ -128,18 +146,40 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
   padding: 20px 0;
+  width: 100%;
+}
+
+/* Media queries for responsive movie grid */
+@media (max-width: 768px) {
+  .movies-grid {
+    grid-template-columns: 1fr; /* Single column for small screens */
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .movies-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+  }
+}
+
+@media (min-width: 1025px) {
+  .movies-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for large screens */
+  }
 }
 
 .movie-card {
-  background: #fff;
+  background: #222222;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #333333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   transition: transform 0.2s;
 }
 
 .movie-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
 }
 
 .movie-card img {
@@ -148,14 +188,19 @@ body {
   object-fit: cover;
 }
 
+.movie-info {
+  padding: 10px;
+  text-align: left;
+}
+
 .movie-card h3 {
-  margin: 10px;
+  margin: 10px 0;
   font-size: 16px;
-  color: #333;
+  color: #ffffff;
 }
 
 .movie-card p {
-  margin: 5px 10px;
+  margin: 5px 0;
   font-size: 14px;
-  color: #666;
+  color: #aaaaaa;
 }

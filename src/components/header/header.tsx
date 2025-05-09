@@ -11,8 +11,21 @@ function Header() {
   const [email, setEmail] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
   const auth = getAuth();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -58,30 +71,32 @@ function Header() {
   };
 
   return (
-    <header className="header">
-      <div className="header-content">
-        <div className="logo">
+    <header className="header" >
+      <div className="header-content responsive" style={{ marginBottom: isSmallScreen ? '100px' : '0px' }}>
+        <div className="logo-container">
           <Link to="/">
             <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
           </Link>
         </div>
         
-        <form className="search-container" onSubmit={handleSearch}>
-          <img src={searchIcon} alt="Search" className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            className="search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </form>
+        <div className="bottom-row">
+          <form className="search-container" onSubmit={handleSearch}>
+            <img src={searchIcon} alt="Search" className="search-icon" />
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </form>
 
-        <div className="user-section">
-          <div className="user-info" onClick={toggleUserMenu}>
-            <span className="username">{email}</span>
-            <img src={userIcon} alt="User" className="user-icon" />
+          <div className="hamburger-menu" onClick={toggleUserMenu}>
+            <div className="hamburger-line"></div>
+            <div className="hamburger-line"></div>
+            <div className="hamburger-line"></div>
           </div>
+          
           {showUserMenu && (
             <div className="user-menu">
               <button onClick={handleProfile} className="option-button">
@@ -96,9 +111,6 @@ function Header() {
             </div>
           )}
         </div>
-
-
-
       </div>
     </header>
   );

@@ -17,16 +17,29 @@
   margin: 0 auto;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #ffffff;
-  margin-right: 70px; /* 40px to the right of the title */
+.header-content.responsive {
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+  text-align: center;
+  width: 100%;
 }
 
 .logo-image {
   width: 250px;
   height: auto;
+  margin-bottom: 1.5rem;
+}
+
+.bottom-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
 }
 
 .search-container {
@@ -36,8 +49,8 @@
   border: 1px solid #ffffff;
   border-radius: 20px;
   padding: 1px 10px;
-  width: 300px;
-  margin-right: auto; /* Push user section to the right */
+  flex-grow: 1;
+  margin-right: 1rem;
 }
 
 .search-icon {
@@ -60,32 +73,20 @@
   color: #BBBBBB;
 }
 
-.user-section {
-  position: relative;
-  margin-right: 40px; /* Reduced from 90px to bring it closer to the right edge */
-}
-
-.user-info {
+.hamburger-menu {
   display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 20px;
-  transition: background-color 0.3s;
-}
-
-.user-info:hover {
-  background-color: #666666;
-}
-
-.username {
-  margin-right: 0.5rem;
-  color: #ffffff;
-}
-
-.user-icon {
-  width: 24px;
+  flex-direction: column;
+  justify-content: space-between;
   height: 24px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.hamburger-line {
+  height: 3px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 2px;
 }
 
 .user-menu {
@@ -116,7 +117,6 @@
 .sign-out-button:hover {
   background-color: #f5f5f5;
 } 
-
 
 .discussion-button-container {
   left: 10000px;
@@ -153,4 +153,40 @@
 .option-button:hover {
   background-color: #f5f5f5;
   color: #222222;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .logo-image {
+    width: 200px;
+    margin-bottom: 3rem;
+  }
+  
+  .search-container {
+    max-width: 100%;
+  }
+  
+  .bottom-row {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    width: 150px;
+    margin-bottom: 4rem;
+  }
+  
+  .bottom-row {
+    flex-wrap: wrap;
+    margin-top: 4rem;
+  }
+  
+  .search-container {
+    margin-right: 0.5rem;
+  }
 }
