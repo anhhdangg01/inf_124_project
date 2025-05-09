@@ -86,40 +86,59 @@ function MovieDetails() {
     return <p>Loading...</p>;
   }
 
-  return (
-    <div className="movie-details-container">
-      <Header />
-      <div className="movie-details">
-        <MoviePoster
-          posterPath={movie.poster_path}
-          title={movie.title}
-          releaseDate={movie.release_date}
-          voteAverage={movie.vote_average}
-        />
-        <MovieOverview overview={movie.overview} />
-        <div className="other-reviews">
-          <h2>Write a review!</h2>
-          <ReviewForm onSubmit={handleReviewSubmit} />
-        </div>
-        <div className="movie-reviews">
-          <h2>Reviews</h2>
-          {reviews.length > 0 ? (
-            reviews.map((review, index) => (
-              <ReviewCard
-                key={index}
-                review={review.review}
-                author={review.author}
-                rating={review.rating}
-              />
-            ))
-          ) : (
-            <p>No reviews yet. Be the first to review!</p>
-          )}
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
-}
+  const handleAddToMovies = () => {
+  if (id) {
+    // Retrieve the existing movies list from localStorage
+    const existingMovies = localStorage.getItem('movies');
+    let moviesList = existingMovies ? JSON.parse(existingMovies) : [];
 
+    // Check if the movie ID is already in the list
+    if (!moviesList.includes(Number(id))) {
+      moviesList.push(Number(id));
+      localStorage.setItem('movies', JSON.stringify(moviesList));
+      alert('Movie added to your list!');
+    } else {
+      alert('Movie is already in your list!');
+    }
+  }
+};
+
+return (
+  <div className="movie-details-container">
+    <Header />
+    <div className="movie-details">
+      <MoviePoster
+        posterPath={movie.poster_path}
+        title={movie.title}
+        releaseDate={movie.release_date}
+        voteAverage={movie.vote_average}
+      />
+      <MovieOverview overview={movie.overview} />
+      <div className="movie-actions">
+        <button onClick={handleAddToMovies}>Add to My Movies</button>
+      </div>
+      <div className="other-reviews">
+        <h2>Write a review!</h2>
+        <ReviewForm onSubmit={handleReviewSubmit} />
+      </div>
+      <div className="movie-reviews">
+        <h2>Reviews</h2>
+        {reviews.length > 0 ? (
+          reviews.map((review, index) => (
+            <ReviewCard
+              key={index}
+              review={review.review}
+              author={review.author}
+              rating={review.rating}
+            />
+          ))
+        ) : (
+          <p>No reviews yet. Be the first to review!</p>
+        )}
+      </div>
+    </div>
+    <Footer />
+  </div>
+);
+}
 export default MovieDetails;
