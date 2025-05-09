@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { searchMovies, Movie } from '../functions/api_service';
+import { getMoviesByGenre, getPopularMovies, Movie } from '../functions/api_service';
 import '../App.css';
 import Header from '../components/header/header';
 import Footer from '../components/footer/footer';
@@ -11,9 +11,15 @@ function Home() {
   const [username, setUsername] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [actionMovies, setActionMovies] = useState<Movie[]>([]);
+  const [comedyMovies, setComedyMovies] = useState<Movie[]>([]);
   const navigate = useNavigate();
   const auth = getAuth();
+
+  // Action genre ID: 28, Comedy genre ID: 35
+  const ACTION_GENRE_ID = 28;
+  const COMEDY_GENRE_ID = 35;
 
   // Handle authentication and set username
   useEffect(() => {
@@ -39,8 +45,13 @@ function Home() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await searchMovies('minecraft');
-        setMovies(response.results);
+        // Get action movies by genre ID
+        const actionResponse = await getMoviesByGenre(ACTION_GENRE_ID);
+        setActionMovies(actionResponse.results);
+        
+        // Get comedy movies by genre ID
+        const comedyResponse = await getMoviesByGenre(COMEDY_GENRE_ID);
+        setComedyMovies(comedyResponse.results);
       } catch (err) {
         setError('Failed to fetch movies');
         console.error(err);
@@ -76,12 +87,12 @@ function Home() {
       <Header />
       <main>
         <h1>Welcome to Vision Bucket</h1>
-        {username && <p>Logged in as: {username}</p>}
         <div className="movies-container">
-          <h2>Minecraft Movies</h2>
+
+          <h2>Action Movies</h2>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className="movies-grid">
-            {movies.map((movie) => (
+            {actionMovies.map((movie) => (
               <div
                 key={movie.id}
                 className="movie-card"
@@ -89,16 +100,45 @@ function Home() {
                   console.log('Movie Data:', movie);
                   handleCardClick(movie.id);
                 }}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', backgroundColor: '#222222' }}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                   alt={movie.title}
-                  style={{ width: '200px', height: '300px', objectFit: 'cover' }}
+                  style={{ width: '100%', height: 'auto', maxHeight: '300px', objectFit: 'cover' }}
                 />
-                <h3>{movie.title}</h3>
-                <p>{movie.release_date}</p>
-                <p>Rating: {movie.vote_average}/10</p>
+                <div className="movie-info">
+                  <h3 style={{ color: '#ffffff' }}>{movie.title}</h3>
+                  <p style={{ color: '#ffffff' }}>{movie.release_date}</p>
+                  <p style={{ color: '#ffffff' }}>Rating: {movie.vote_average}/10</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h2>Comedy Movies</h2>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <div className="movies-grid">
+            {comedyMovies.map((movie) => (
+              <div
+                key={movie.id}
+                className="movie-card"
+                onClick={() => {
+                  console.log('Movie Data:', movie);
+                  handleCardClick(movie.id);
+                }}
+                style={{ cursor: 'pointer', backgroundColor: '#222222' }}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  style={{ width: '100%', height: 'auto', maxHeight: '300px', objectFit: 'cover' }}
+                />
+                <div className="movie-info">
+                  <h3 style={{ color: '#ffffff' }}>{movie.title}</h3>
+                  <p style={{ color: '#ffffff' }}>{movie.release_date}</p>
+                  <p style={{ color: '#ffffff' }}>Rating: {movie.vote_average}/10</p>
+                </div>
               </div>
             ))}
           </div>
