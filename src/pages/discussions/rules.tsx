@@ -11,7 +11,7 @@ function Rules() {
       <div className="discussion-container">
         {/* Breadcrumb Navigation */}
         <nav className="breadcrumb">
-          <Link to="/discussions" className="breadcrumb-link">Discussion</Link>
+          <Link to="/discussion" className="breadcrumb-link">Discussion</Link>
           <span className="breadcrumb-separator"> &gt; </span>
           <span className="breadcrumb-current">Rules</span>
         </nav>

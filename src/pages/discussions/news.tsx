@@ -23,7 +23,7 @@ function News() {
         <nav className="breadcrumb">
           <Link to="/discussion" className="breadcrumb-link">Discussion</Link>
           <span className="breadcrumb-separator"> &gt; </span>
-          <span className="breadcrumb-current">General</span>
+          <span className="breadcrumb-current">News</span>
         </nav>
         <h1> News</h1>
         <DiscussionPreviews threads={threadsData} />
