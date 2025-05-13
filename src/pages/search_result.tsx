@@ -55,6 +55,7 @@ function SearchResults() {
     return (
       <div className="App">
         <Header />
+        <div style={{marginTop: '100px'}}></div>
         <main>
           <h1>Search Results for: {query}</h1>
   

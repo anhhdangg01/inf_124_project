@@ -8,6 +8,7 @@ function Rules() {
   return (
     <div className="discussion-page">
       <Header />
+      <div style={{marginTop: '100px'}}></div>
       <div className="discussion-container">
         {/* Breadcrumb Navigation */}
         <nav className="breadcrumb">

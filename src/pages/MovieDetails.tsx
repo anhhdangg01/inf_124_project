@@ -113,6 +113,7 @@ function MovieDetails() {
 return (
   <div className="movie-details-container">
     <Header />
+    <div style={{marginTop: '100px'}}></div>
     <div className="movie-details">
       <MoviePoster
         posterPath={movie.poster_path}
