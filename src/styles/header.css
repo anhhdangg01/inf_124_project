@@ -2,7 +2,7 @@
 .header {
   background-color: #222222;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
+  padding: .5rem 10rem;
   position: fixed;
   top: 0;
   left: 0;
@@ -13,8 +13,13 @@
 .header-content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   position: relative;
   margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  flex-wrap: nowrap; /* Prevent wrapping unless you want a stacked layout */
+  gap: 1rem;
 }
 
 .header-content.responsive {
@@ -22,16 +27,17 @@
   align-items: center;
 }
 
-.logo-container {
-  margin-bottom: 2rem;
-  text-align: center;
-  width: 100%;
-}
+  .logo-container {
+    flex: 0 0 auto; /* Prevent shrinking */
+    min-width: 150px; /* Prevents logo from getting too small */
+    margin-bottom: 0;
+    border: 1px solid red;
+  }
 
 .logo-image {
   width: 250px;
   height: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0; /* Remove extra margin to help with alignment */
 }
 
 .bottom-row {
@@ -46,11 +52,14 @@
   display: flex;
   align-items: center;
   background-color: #222222;
-  border: 1px solid #ffffff;
+  border: 3px solid #00f !important;
   border-radius: 20px;
   padding: 1px 10px;
-  flex-grow: 1;
-  margin-right: 1rem;
+  flex: 1 1 300px; /* Allow to grow, but not shrink below 300px */
+  max-width: 500px;
+  min-width: 200px; /* Prevents search bar from shrinking too much */
+  margin: 0 1rem;
+  box-sizing: border-box;
 }
 
 .search-icon {
@@ -80,6 +89,9 @@
   height: 24px;
   width: 30px;
   cursor: pointer;
+  flex: 0 0 auto;
+  margin-left: 1rem;
+  z-index: 10;
 }
 
 .hamburger-line {

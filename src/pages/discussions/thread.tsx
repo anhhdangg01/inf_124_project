@@ -5,6 +5,7 @@ import '../../styles/discussion.css';
 import { Link, useParams } from 'react-router-dom';
 import threadsData from '../../data/threads.json'; // Import the JSON file
 import NewsaData from '../../data/threads_news.json'; // Import the JSON file
+import CommentForm from '../../components/discussion/Commentform';
 
 function ThreadDetails() {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,7 @@ function ThreadDetails() {
   }
 
   const [thread, setThread] = useState<Thread | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     // Load threads from localStorage
@@ -40,10 +42,35 @@ function ThreadDetails() {
         ...foundThread,
         createdAt: foundThread.date || new Date().toISOString().split('T')[0],
       });
+      setComments(foundThread.comments || []);
     } else {
       setThread(null);
+      setComments([]);
     }
   }, [id]);
+
+  const handleAddComment = (commentText: string) => {
+    if (!thread) return;
+
+    // Get author from localStorage, fallback to "Anonymous"
+    const author = localStorage.getItem('username') || "Anonymous";
+
+    const newComment: Comment = {
+      id: Date.now().toString(),
+      text: commentText,
+      author: author,
+    };
+    const updatedComments = [...comments, newComment];
+    setComments(updatedComments);
+
+    // Optionally, update localStorage if you want to persist comments
+    const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
+    const threadIndex = localThreads.findIndex((t: Thread) => t.id === thread.id);
+    if (threadIndex !== -1) {
+      localThreads[threadIndex].comments = updatedComments;
+      localStorage.setItem('threads', JSON.stringify(localThreads));
+    }
+  };
 
   if (!thread) {
     return <div>Loading...</div>;
@@ -62,23 +89,28 @@ function ThreadDetails() {
           <span className="breadcrumb-current">{thread.title}</span>
         </nav>
 
-        <h1>{thread.title}</h1>
-        <p>Created by: {thread.author}</p>
-        <p>{thread.description}</p>
-        <p>Created at: {thread.createdAt}</p>
+        <div className="thread-details-card">
+          <h1 className="thread-title">{thread.title}</h1>
+          <div className="thread-meta">
+            <span className="thread-author">By {thread.author}</span>
+            <span className="thread-date">{thread.createdAt}</span>
+          </div>
+          <p className="thread-description">{thread.description}</p>
+        </div>
 
         {/* Render Comments */}
         <div className="comments-section">
-          <h2>Comments</h2>
-          {thread.comments.length > 0 ? (
-            thread.comments.map((comment) => (
-              <div key={comment.id} className="comment">
-                <p><strong>{comment.author}:</strong> {comment.text}</p>
+          <h2 className="comments-title">Comments</h2>
+          {comments.length > 0 ? (
+            comments.map((comment) => (
+              <div key={comment.id} className="comment-card">
+                <p className="discussion-comment"><strong>{comment.author}:</strong> {comment.text}</p>
               </div>
             ))
           ) : (
-            <p>No comments yet.</p>
+            <p className="no-comments">No comments yet.</p>
           )}
+          <CommentForm onSubmit={handleAddComment} />
         </div>
       </div>
       <Footer />

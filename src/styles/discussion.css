@@ -143,23 +143,23 @@ p {
 
 .thread-creation {
     margin-top: 2rem;
-    padding: 1.5rem;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem 2rem 1.5rem 2rem;
+    background: #23272b;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    color: #fff;
+    text-align: left;
 }
 
-.thread-title {
-    font-size: 1.5rem;
-    font-weight: bold;
+.thread-creation h2 {
+    color: #fff;
     margin-bottom: 1rem;
-    color: #333;
 }
 
 .thread-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
 }
 
 .form-group {
@@ -170,27 +170,102 @@ p {
 .form-group label {
     font-size: 1rem;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: #b0b0b0;
 }
 
-.form-group input {
+.form-group input,
+.form-group textarea {
     padding: 0.75rem;
     font-size: 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid #444;
     border-radius: 4px;
+    background: #333a40;
+    color: #fff;
+    transition: border 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border: 1.5px solid #4fc3f7;
+    outline: none;
 }
 
 .create-thread-btn {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     color: #fff;
-    background-color: #007bff;
+    background-color: #1976d2;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 }
 
 .create-thread-btn:hover {
-    background-color: #0056b3;
+    background-color: #4fc3f7;
+}
+
+.thread-details-card {
+    background: #292929;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+    color: #fff;
+    text-align: left;
+}
+
+.thread-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+    color: #b0b0b0;
+    margin-bottom: 1rem;
+}
+
+.thread-author {
+    font-weight: 500;
+}
+
+.thread-date {
+    font-style: italic;
+}
+
+.thread-description {
+    font-size: 1.15rem;
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+}
+
+.comments-section {
+    background: #23272b;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+}
+
+.comments-title {
+    font-size: 1.3rem;
+    color: #81d4fa;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.comment-card {
+    background: #333a40;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: left;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+
+.no-comments {
+    color: #aaa;
+    font-style: italic;
+    margin-bottom: 1rem;
 }
