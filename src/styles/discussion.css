@@ -269,3 +269,75 @@ p {
     font-style: italic;
     margin-bottom: 1rem;
 }
+
+
+.rules-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.rules-intro {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+.rules-content {
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.rules-section {
+  margin-bottom: 2rem;
+}
+
+.rules-section h2 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.rules-list {
+  list-style-type: none;
+  padding-left: 1rem;
+}
+
+.rules-list li {
+  margin-bottom: 0.8rem;
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+}
+
+.rules-list li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #4a6fa5;
+  font-weight: bold;
+}
+
+.rules-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #eee;
+  font-size: 0.9rem;
+}
+
+.rules-questions {
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.rules-contact-link {
+  color: #4a6fa5;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.rules-contact-link:hover {
+  text-decoration: underline;
+}
