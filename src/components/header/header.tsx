@@ -72,46 +72,45 @@ function Header() {
 
   return (
     <header className="header" >
-      <div className={`header-content${isSmallScreen ? ' responsive' : ''}`}>
-
+      <div className="header-content responsive" style={{ marginBottom: isSmallScreen ? '100px' : '0px' }}>
         <div className="logo-container">
           <Link to="/">
             <img src={VisionBucket} alt="Vision Bucket" className="logo-image" />
           </Link>
         </div>
-
-        <form className="search-container" onSubmit={handleSearch}>
-          <img src={searchIcon} alt="Search" className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            className="search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </form>
-
         
-        <div className="hamburger-menu" onClick={toggleUserMenu} tabIndex={0} role="button" aria-label="Open user menu">
-          <div className="hamburger-line"></div>
-          <div className="hamburger-line"></div>
-          <div className="hamburger-line"></div>
-        </div>
+        <div className="bottom-row">
+          <form className="search-container" onSubmit={handleSearch}>
+            <img src={searchIcon} alt="Search" className="search-icon" />
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </form>
 
-        {showUserMenu && (
-          <div className="user-menu">
-            <button onClick={handleProfile} className="option-button">
-              Profile
-            </button>
-            <button onClick={handeldiscussion} className="option-button">
-              Discussion
-            </button>
-            <button onClick={handleSignOut} className="sign-out-button">
-              Sign Out
-            </button>
+          <div className="hamburger-menu" onClick={toggleUserMenu}>
+            <div className="hamburger-line"></div>
+            <div className="hamburger-line"></div>
+            <div className="hamburger-line"></div>
           </div>
-        )}
-
+          
+          {showUserMenu && (
+            <div className="user-menu">
+              <button onClick={handleProfile} className="option-button">
+                Profile
+              </button>
+              <button onClick={handeldiscussion} className="option-button">
+                Discussion
+              </button>
+              <button onClick={handleSignOut} className="sign-out-button">
+                Sign Out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
