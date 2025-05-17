@@ -26,6 +26,7 @@
   margin-bottom: 2rem;
   text-align: center;
   width: 100%;
+  max-width: 250px;
 }
 
 .logo-image {
@@ -38,8 +39,9 @@
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 1.5rem;
+  gap: 1rem;
 }
 
 .search-container {
@@ -49,8 +51,9 @@
   border: 1px solid #ffffff;
   border-radius: 20px;
   padding: 1px 10px;
-  flex-grow: 1;
-  margin-right: 1rem;
+  flex-grow: 0;
+  margin: 0 auto; 
+  max-width: 400px;
 }
 
 .search-icon {
@@ -60,6 +63,7 @@
 }
 
 .search-input {
+  
   width: 100%;
   border: none !important;
   outline: none;

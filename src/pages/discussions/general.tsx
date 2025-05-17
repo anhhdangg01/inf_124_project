@@ -58,6 +58,7 @@ function GeneralDiscussion() {
   return (
     <div className="discussion-page">
       <Header />
+      <div style={{marginTop: '100px'}}></div>
       <div className="discussion-container">
         <nav className="breadcrumb">
           <Link to="/discussion" className="breadcrumb-link">Discussion</Link>

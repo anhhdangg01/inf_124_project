@@ -61,6 +61,13 @@ function MovieDetails() {
       const existingReviews = localStorage.getItem('reviews');
       let reviewsList = existingReviews ? JSON.parse(existingReviews) : [];
 
+      // Check if a review for this movie already exists
+      const alreadyReviewed = reviewsList.some((review: any) => Number(review.movieId) === Number(id));
+      if (alreadyReviewed) {
+        alert('You have already submitted a review for this movie!');
+        return;
+      }
+
       // Add the new review
       const newReview = {
         movieId: Number(id),
@@ -106,6 +113,7 @@ function MovieDetails() {
 return (
   <div className="movie-details-container">
     <Header />
+    <div style={{marginTop: '100px'}}></div>
     <div className="movie-details">
       <MoviePoster
         posterPath={movie.poster_path}

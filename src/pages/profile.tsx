@@ -37,6 +37,7 @@ function Profile() {
   return (
     <div className="App">
       <Header />
+      <div style={{marginTop: '100px'}}></div>
       <div className="stats-section">
         <UserStats />
         <div className="stats-panel">

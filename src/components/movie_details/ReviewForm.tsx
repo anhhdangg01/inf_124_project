@@ -16,13 +16,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit }) => {
 
   return (
     <div className="review-form">
-      <textarea
+      <textarea 
+        style={{ width: '100%', height: '100px', marginBottom: '10px', resize: 'none', backgroundColor: '#222222', borderRadius: '5px', color: '#fff' }}
         placeholder="Write your review here..."
         value={reviewText}
         onChange={(e) => setReviewText(e.target.value)}
         rows={4}
       />
-      <select
+      <select 
+      style={{ width: '30%', height: '40px', marginBottom: '10px', backgroundColor: '#222222', borderRadius: '5px', color: '#fff' }}
         value={rating}
         onChange={(e) => setRating(Number(e.target.value))}
       >
@@ -33,7 +35,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit }) => {
         <option value={4}>4</option>
         <option value={5}>5</option>
       </select>
-      <button onClick={handleSubmit}>Submit</button>
+      <button style={{ width: '100%', height: '40px', backgroundColor: '#2D2D2D', color: '#ffff', borderRadius: '10%' }}
+      
+      onClick={handleSubmit}>Submit</button>
     </div>
   );
 };
