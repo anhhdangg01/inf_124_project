@@ -44,6 +44,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
     margin: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+    display: grid;
 }
 
 .stats-panel {
@@ -67,6 +70,7 @@ h2 {
 p {
     font-size: 1.2rem;
     text-align: left;
+    font-weight: normal;
 }
 
 
@@ -124,4 +128,8 @@ p {
 
 .movie-history{
     text-align: left;
+}
+
+.pie-chart {
+    width: 300px;
 }
