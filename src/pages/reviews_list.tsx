@@ -6,7 +6,7 @@ function ReviewsList() {
     return (
         <div className="App">
             <Header />
-            
+            <div style={{marginTop: '100px'}}></div>
             <Footer />
         </div>
     );

@@ -17,7 +17,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit }) => {
   return (
     <div className="review-form">
       <textarea 
-        style={{ width: '100%', height: '100px', marginBottom: '10px', resize: 'none', backgroundColor: '#222222', borderRadius: '5px' }}
+        style={{ width: '100%', height: '100px', marginBottom: '10px', resize: 'none', backgroundColor: '#222222', borderRadius: '5px', color: '#fff' }}
         placeholder="Write your review here..."
         value={reviewText}
         onChange={(e) => setReviewText(e.target.value)}

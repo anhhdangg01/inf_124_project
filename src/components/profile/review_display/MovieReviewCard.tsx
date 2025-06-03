@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getMovieDetails, Movie } from '../../../functions/api_service';
-
+import onestar from '../../../assets/1star.png';
+import twostar from '../../../assets/2star.png';
+import threestar from '../../../assets/3star.png';
+import fourstar from '../../../assets/4star.png';
+import fivestar from '../../../assets/5star.png';
+import zerostar from '../../../assets/0star.png';
 interface MovieReviewCardProps {
   movieId: number;
   review: string;
@@ -28,17 +33,17 @@ const MovieReviewCard: React.FC<MovieReviewCardProps> = ({ movieId, review, rati
   const getTempImage = (rating: number) => {
     switch (rating) {
       case 1:
-        return 'https://via.placeholder.com/100?text=1+Star';
+        return onestar;
       case 2:
-        return 'https://via.placeholder.com/100?text=2+Stars';
+        return twostar;
       case 3:
-        return 'https://via.placeholder.com/100?text=3+Stars';
+        return threestar;
       case 4:
-        return 'https://via.placeholder.com/100?text=4+Stars';
+        return fourstar;
       case 5:
-        return 'https://via.placeholder.com/100?text=5+Stars';
+        return fivestar;
       default:
-        return 'https://via.placeholder.com/100?text=No+Rating';
+        return zerostar;
     }
   };
 

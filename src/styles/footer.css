@@ -31,8 +31,10 @@
   }
   
   .footer-logo img {
-    height: 40px;
+    max-width: 100%;   /* Ensures image never exceeds its container */
+    height: auto;      /* Maintains aspect ratio */
     margin-bottom: 0.5rem;
+    display: block;    /* Removes inline spacing */
   }
   
   .footer-logo p {
