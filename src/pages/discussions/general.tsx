@@ -4,51 +4,79 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
 import DiscussionPreviews from '../../components/discussion/post_preview';
-import threadsData from '../../data/threads.json'; // Import the JSON file
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
+interface Thread {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+}
 
 function GeneralDiscussion() {
   const [username, setUsername] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [threads, setThreads] = useState(threadsData); // Initialize with JSON data
+  const [threads, setThreads] = useState<Thread[]>([]); // Initialize as an empty array
   const navigate = useNavigate();
 
-  // Load threads from localStorage on component mount
+  // Fetch threads from the backend API
   useEffect(() => {
-    const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
-    setThreads([...threadsData, ...localThreads]);
+    const fetchThreads = async () => {
+      try {
+        console.log('Fetching threads from backend...');
+        const response = await fetch('http://localhost:5000/discussions/posts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch threads');
+        }
+        const data = await response.json();
+
+        // Map backend fields to match the Thread interface
+        const mappedThreads = data.map((thread: any) => ({
+          id: thread.id,
+          author: thread.Author,
+          date: thread.Date,
+          title: thread.Title,
+          description: thread.Description
+          
+        }));
+
+        setThreads(mappedThreads);
+      } catch (error) {
+        console.error('Error fetching threads:', error);
+      }
+    };
+
+    fetchThreads();
+
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-            const extractedUsername = user.email?.split('@')[0] || 'Unknown User';
-            setUsername(extractedUsername);
-        } else {
-            setUsername(null);
-        }
+      if (user) {
+        const extractedUsername = user.email?.split('@')[0] || 'Unknown User';
+        setUsername(extractedUsername);
+      } else {
+        setUsername(null);
+      }
     });
+
     return () => unsubscribe();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Create a new thread object
     const newThread = {
-        id: Date.now().toString(), // Generate a unique ID
-        title,
-        description,
-        date: new Date().toISOString().split('T')[0],
-        author: username || 'Anonymous',
-        comments: []
+      id: Date.now().toString(), // Generate a unique ID
+      title,
+      description,
+      date: new Date().toISOString().split('T')[0],
+      author: username || 'Anonymous',
     };
-    // Save the new thread to localStorage
-    const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
-    const updatedThreads = [...localThreads, newThread];
-    localStorage.setItem('threads', JSON.stringify(updatedThreads));
- 
-    // Update the state to include the new thread
-    setThreads((prevThreads) => [...(prevThreads || []), newThread]);
+
+    // Update the state to include the new thread (local only for now)
+    setThreads((prevThreads) => [...prevThreads, newThread]);
 
     // Clear the form fields
     setTitle('');
@@ -58,6 +86,7 @@ function GeneralDiscussion() {
   return (
     <div className="discussion-page">
       <Header />
+      <div style={{marginTop: '100px'}}></div>
       <div className="discussion-container">
         <nav className="breadcrumb">
           <Link to="/discussion" className="breadcrumb-link">Discussion</Link>
@@ -94,7 +123,7 @@ function GeneralDiscussion() {
             <button className="create-thread-btn">CREATE THREAD</button>
           </form>
         </main>
-        <DiscussionPreviews threads={threads} /> {/* Pass combined threads */}
+        <DiscussionPreviews threads={threads} /> {/* Pass fetched threads */}
       </div>
       <Footer />
     </div>
