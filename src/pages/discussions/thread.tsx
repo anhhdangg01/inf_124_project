@@ -3,17 +3,16 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
 import { Link, useParams } from 'react-router-dom';
-import threadsData from '../../data/threads.json'; // Import the JSON file
-import NewsaData from '../../data/threads_news.json'; // Import the JSON file
 import CommentForm from '../../components/discussion/Commentform';
 
 function ThreadDetails() {
   const { id } = useParams<{ id: string }>();
 
   interface Comment {
-    id: string;
-    text: string;
+    commentId: string;
+    content: string;
     author: string;
+    date: string;
   }
 
   interface Thread {
@@ -21,7 +20,7 @@ function ThreadDetails() {
     title: string;
     description: string;
     author: string;
-    createdAt: string;
+    date: string;
     comments: Comment[];
   }
 
@@ -29,46 +28,67 @@ function ThreadDetails() {
   const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
-    // Load threads from localStorage
-    const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
+    const fetchThread = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/discussions/post/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch thread');
+        }
+        const data = await response.json();
+        console.log('Fetched thread:', data);
 
-    // Combine threads from JSON files and localStorage
-    const allThreads = [...threadsData, ...NewsaData, ...localThreads];
+        // Map backend fields to match the Thread interface
+        const mappedThread = {
+          id: data.id,
+          author: data.Author,
+          date: data.Date,
+          title: data.Title,
+          description: data.Description,
+          comments: data.Comments || [],
+        };
 
-    // Find the thread by ID
-    const foundThread = allThreads.find((thread) => thread.id === id);
-    if (foundThread) {
-      setThread({
-        ...foundThread,
-        createdAt: foundThread.date || new Date().toISOString().split('T')[0],
-      });
-      setComments(foundThread.comments || []);
-    } else {
-      setThread(null);
-      setComments([]);
-    }
+        setThread(mappedThread);
+        setComments(mappedThread.comments);
+      } catch (error) {
+        console.error('Error fetching thread:', error);
+        setThread(null);
+        setComments([]);
+      }
+    };
+
+    fetchThread();
   }, [id]);
 
-  const handleAddComment = (commentText: string) => {
+  const handleAddComment = async (commentText: string) => {
     if (!thread) return;
 
-    // Get author from localStorage, fallback to "Anonymous"
     const author = localStorage.getItem('username') || "Anonymous";
+    const date = new Date().toISOString().split('T')[0];
 
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      text: commentText,
-      author: author,
-    };
-    const updatedComments = [...comments, newComment];
-    setComments(updatedComments);
+    try {
+      const response = await fetch(`http://localhost:5000/discussions/post/${id}/comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          author,
+          content: commentText,
+          date,
+        }),
+      });
 
-    // Optionally, update localStorage if you want to persist comments
-    const localThreads = JSON.parse(localStorage.getItem('threads') || '[]');
-    const threadIndex = localThreads.findIndex((t: Thread) => t.id === thread.id);
-    if (threadIndex !== -1) {
-      localThreads[threadIndex].comments = updatedComments;
-      localStorage.setItem('threads', JSON.stringify(localThreads));
+      if (!response.ok) {
+        throw new Error(`Failed to add comment: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const newComment = data.comment;
+      
+      setComments(prevComments => [...prevComments, newComment]);
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      // Optionally show error message to user
     }
   };
 
@@ -94,7 +114,7 @@ function ThreadDetails() {
           <h1 className="thread-title">{thread.title}</h1>
           <div className="thread-meta">
             <span className="thread-author">By {thread.author}</span>
-            <span className="thread-date">{thread.createdAt}</span>
+            <span className="thread-date">{thread.date}</span>
           </div>
           <p className="thread-description">{thread.description}</p>
         </div>
@@ -104,8 +124,11 @@ function ThreadDetails() {
           <h2 className="comments-title">Comments</h2>
           {comments.length > 0 ? (
             comments.map((comment) => (
-              <div key={comment.id} className="comment-card">
-                <p className="discussion-comment"><strong>{comment.author}:</strong> {comment.text}</p>
+              <div key={comment.commentId} className="comment-card">
+                <p className="discussion-comment">
+                  <strong>{comment.author}:</strong> {comment.content}
+                </p>
+                <span className="comment-date">{comment.date}</span>
               </div>
             ))
           ) : (

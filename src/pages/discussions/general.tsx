@@ -66,21 +66,64 @@ function GeneralDiscussion() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Create a new thread object
-    const newThread = {
-      id: Date.now().toString(), // Generate a unique ID
-      title,
-      description,
-      date: new Date().toISOString().split('T')[0],
-      author: username || 'Anonymous',
-    };
+    try {
+      const response = await fetch('http://localhost:5000/discussions/posting', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Author: username || 'Anonymous',
+          Date: new Date().toISOString().split('T')[0],
+          Comments: [], // Add the Comments array here
+          Title: title,
+          Description: description,
+        }),
+      });
 
-    // Update the state to include the new thread (local only for now)
-    setThreads((prevThreads) => [...prevThreads, newThread]);
+      if (!response.ok) {
+        throw new Error(`Failed to create thread: ${response.status}`);
+      }
 
-    // Clear the form fields
-    setTitle('');
-    setDescription('');
+      // Optionally, handle the response from the backend (e.g., show a success message)
+      const responseData = await response.json();
+      console.log('Thread created successfully:', responseData);
+
+      // Fetch threads again to update the list
+      const fetchThreads = async () => {
+        try {
+          console.log('Fetching threads from backend...');
+          const response = await fetch('http://localhost:5000/discussions/posts');
+          if (!response.ok) {
+            throw new Error('Failed to fetch threads');
+          }
+          const data = await response.json();
+
+          // Map backend fields to match the Thread interface
+          const mappedThreads = data.map((thread: any) => ({
+            id: thread.id,
+            author: thread.Author,
+            date: thread.Date,
+            title: thread.Title,
+            description: thread.Description
+            
+          }));
+
+          setThreads(mappedThreads);
+        } catch (error) {
+          console.error('Error fetching threads:', error);
+        }
+      };
+
+      fetchThreads();
+
+      // Clear the form fields
+      setTitle('');
+      setDescription('');
+    } catch (error) {
+      console.error('Error creating thread:', error);
+      // Optionally, show an error message to the user
+    }
   };
 
   return (
