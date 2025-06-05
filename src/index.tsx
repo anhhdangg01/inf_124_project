@@ -16,6 +16,7 @@ import Profile from './pages/profile';
 import SearchResult from './pages/search_result';
 import ThreadDetails from './pages/discussions/thread';
 import MovieDetails from './pages/MovieDetails';
+import ThreadNewsDetails from './pages/discussions/thread_news';
 
 // Firebase configuration
 // Note: In a production environment, these values should be stored in environment variables
@@ -51,6 +52,7 @@ root.render(
         <Route path="/search-result/:query" element={<SearchResult />} />
         <Route path="/threads/:id" element={<ThreadDetails />} />
         <Route path="/show/:id" element={<MovieDetails />} />
+        <Route path="/news-threads/:id" element={<ThreadNewsDetails />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

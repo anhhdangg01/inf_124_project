@@ -10,7 +10,7 @@ interface Thread {
   author: string;
 }
 
-const PostPreviewThreads: React.FC<{ threads: Thread[] }> = ({ threads }) => {
+const PostPreviewNews: React.FC<{ threads: Thread[] }> = ({ threads }) => {
   const navigate = useNavigate();
 
   return (
@@ -19,7 +19,7 @@ const PostPreviewThreads: React.FC<{ threads: Thread[] }> = ({ threads }) => {
         <div className="background_discussion" key={thread.id}>
           <div
             className="discussion-preview"
-            onClick={() => navigate(`/threads/${thread.id}`)}
+            onClick={() => navigate(`/news-threads/${thread.id}`)}
             style={{ cursor: 'pointer' }}
           >
             <h3 className="preview-card">{thread.title}</h3>
@@ -39,4 +39,4 @@ const PostPreviewThreads: React.FC<{ threads: Thread[] }> = ({ threads }) => {
   );
 };
 
-export default PostPreviewThreads;
+export default PostPreviewNews;
