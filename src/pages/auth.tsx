@@ -24,7 +24,34 @@ function Auth() {
         await signInWithEmailAndPassword(auth, email, password);
       } else {
         // Sign up
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // Extract username from email (everything before @)
+        const username = email.split('@')[0];
+        
+        // Create user profile in database
+        const response = await fetch(`http://localhost:5000/profile/create/${userCredential.user.uid}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Username: username,
+            Joined: new Date(),
+            Last_online: new Date(),
+            move_list: [],
+            reviews: [],
+            Completed: [],
+            Dropped: [],
+            On_hold: [],
+            Plan_to_watch: [],
+            Rewatched: []
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create user profile');
+        }
       }
       // Redirect to home page on success
       navigate('/');
