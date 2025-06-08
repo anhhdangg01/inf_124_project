@@ -10,6 +10,11 @@ import MovieOverview from '../components/movie_details/MovieOverview';
 import ReviewForm from '../components/movie_details/ReviewForm';
 import otherReviews from '../data/other_reviews.json';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import green_circle from '../assets/circles/green_circle.png';
+import blue_circle from '../assets/circles/blue_circle.png';
+import yellow_circle from '../assets/circles/yellow_circle.png';
+import red_circle from '../assets/circles/red_circle.png';
+import grey_circle from '../assets/circles/grey_circle.png';
 
 interface Review {
   movieId: number;
@@ -18,6 +23,14 @@ interface Review {
   author: string;
 }
 
+const STATUS_OPTIONS = [
+  { value: 'Watching', label: 'Watching', icon: green_circle },
+  { value: 'Completed', label: 'Completed', icon: blue_circle },
+  { value: 'On_hold', label: 'On-hold', icon: yellow_circle },
+  { value: 'Dropped', label: 'Dropped', icon: red_circle },
+  { value: 'Plan_to_watch', label: 'Plan to Watch', icon: grey_circle },
+];
+
 function MovieDetails() {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -25,6 +38,8 @@ function MovieDetails() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [inMovieList, setInMovieList] = useState<boolean>(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>('Watching');
+  const [statusLoading, setStatusLoading] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -142,6 +157,31 @@ function MovieDetails() {
     }
   };
 
+  // Set status for this movie
+  const handleSetStatus = async () => {
+    if (!user) {
+      alert('You must be logged in to update movie status.');
+      return;
+    }
+    setStatusLoading(true);
+    try {
+      const response = await fetch(
+        `http://localhost:5000/profile/update/${user.uid}/${selectedStatus}/add_movie`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ movieId: Number(id) }),
+        }
+      );
+      if (!response.ok) throw new Error('Failed to update movie status');
+      alert(`Movie set to "${selectedStatus.replace(/_/g, ' ')}"!`);
+    } catch (err) {
+      alert('Failed to update movie status.');
+      console.error(err);
+    }
+    setStatusLoading(false);
+  };
+
   if (error) {
     return <p style={{ color: 'red' }}>{error}</p>;
   }
@@ -163,6 +203,33 @@ function MovieDetails() {
         />
         <MovieOverview overview={movie.overview} />
         <div className="movie-actions">
+          <label htmlFor="status-dropdown"><b>Set Movie Status:</b></label>
+          <select
+            id="status-dropdown"
+            value={selectedStatus}
+            onChange={e => setSelectedStatus(e.target.value)}
+            style={{ marginLeft: 10 }}
+          >
+            {STATUS_OPTIONS.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <span style={{ marginLeft: 10 }}>
+            <img
+              src={STATUS_OPTIONS.find(opt => opt.value === selectedStatus)?.icon}
+              alt={selectedStatus}
+              style={{ width: 20, height: 20, verticalAlign: 'middle' }}
+            />
+          </span>
+          <button
+            onClick={handleSetStatus}
+            disabled={statusLoading}
+            style={{ marginLeft: 10 }}
+          >
+            Save
+          </button>
           {!inMovieList ? (
             <button onClick={handleAddToMovies}>Add to My Movies</button>
           ) : (

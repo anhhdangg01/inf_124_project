@@ -48,6 +48,7 @@ function Auth() {
             Dropped: [],
             On_hold: [],
             Plan_to_watch: [],
+            Watching: [],
             Rewatched: []
           })
         });
