@@ -29,6 +29,9 @@ function Auth() {
         // Extract username from email (everything before @)
         const username = email.split('@')[0];
         
+        // Create current timestamp
+        const currentDate = new Date().toISOString();
+        
         // Create user profile in database
         const response = await fetch(`http://localhost:5000/profile/create/${userCredential.user.uid}`, {
           method: 'POST',
@@ -37,9 +40,9 @@ function Auth() {
           },
           body: JSON.stringify({
             Username: username,
-            Joined: new Date(),
-            Last_online: new Date(),
-            move_list: [],
+            Joined: currentDate,
+            Last_online: currentDate,
+            movie_list: [],
             reviews: [],
             Completed: [],
             Dropped: [],
