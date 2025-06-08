@@ -8,6 +8,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 interface Thread {
   id: string;
+  uid: string;
   title: string;
   description: string;
   date: string;
@@ -16,6 +17,7 @@ interface Thread {
 
 function GeneralDiscussion() {
   const [username, setUsername] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [threads, setThreads] = useState<Thread[]>([]); // Initialize as an empty array
@@ -35,6 +37,7 @@ function GeneralDiscussion() {
         // Map backend fields to match the Thread interface
         const mappedThreads = data.map((thread: any) => ({
           id: thread.id,
+          uid: thread.uid,
           author: thread.Author,
           date: thread.Date,
           title: thread.Title,
@@ -55,8 +58,10 @@ function GeneralDiscussion() {
       if (user) {
         const extractedUsername = user.email?.split('@')[0] || 'Unknown User';
         setUsername(extractedUsername);
+        setUserId(user.uid);
       } else {
         setUsername(null);
+        setUserId(null);
       }
     });
 
@@ -66,6 +71,11 @@ function GeneralDiscussion() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!userId) {
+      alert('You must be logged in to post.');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/discussions/posting', {
         method: 'POST',
@@ -74,8 +84,9 @@ function GeneralDiscussion() {
         },
         body: JSON.stringify({
           Author: username || 'Anonymous',
+          uid: userId,
           Date: new Date().toISOString().split('T')[0],
-          Comments: [], // Add the Comments array here
+          Comments: [],
           Title: title,
           Description: description,
         }),
@@ -84,12 +95,8 @@ function GeneralDiscussion() {
       if (!response.ok) {
         throw new Error(`Failed to create thread: ${response.status}`);
       }
-
-      // Optionally, handle the response from the backend (e.g., show a success message)
       const responseData = await response.json();
       console.log('Thread created successfully:', responseData);
-
-      // Fetch threads again to update the list
       const fetchThreads = async () => {
         try {
           console.log('Fetching threads from backend...');
@@ -102,6 +109,7 @@ function GeneralDiscussion() {
           // Map backend fields to match the Thread interface
           const mappedThreads = data.map((thread: any) => ({
             id: thread.id,
+            uid: thread.uid,
             author: thread.Author,
             date: thread.Date,
             title: thread.Title,
@@ -122,7 +130,49 @@ function GeneralDiscussion() {
       setDescription('');
     } catch (error) {
       console.error('Error creating thread:', error);
-      // Optionally, show an error message to the user
+    }
+  };
+
+  const handleDeleteThread = async (threadId: string, uid: string) => {
+    try {
+      const response = await fetch(`http://localhost:5000/discussions/post/${threadId}/${uid}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete thread: ${response.status}`);
+      }
+
+      // Refresh the threads list after successful deletion
+      const fetchThreads = async () => {
+        try {
+          console.log('Fetching threads from backend...');
+          const response = await fetch('http://localhost:5000/discussions/posts');
+          if (!response.ok) {
+            throw new Error('Failed to fetch threads');
+          }
+          const data = await response.json();
+
+          // Map backend fields to match the Thread interface
+          const mappedThreads = data.map((thread: any) => ({
+            id: thread.id,
+            uid: thread.uid,
+            author: thread.Author,
+            date: thread.Date,
+            title: thread.Title,
+            description: thread.Description
+            
+          }));
+
+          setThreads(mappedThreads);
+        } catch (error) {
+          console.error('Error fetching threads:', error);
+        }
+      };
+
+      fetchThreads();
+    } catch (error) {
+      console.error('Error deleting thread:', error);
     }
   };
 
@@ -166,7 +216,7 @@ function GeneralDiscussion() {
             <button className="create-thread-btn">CREATE THREAD</button>
           </form>
         </main>
-        <DiscussionPreviews threads={threads} /> {/* Pass fetched threads */}
+        <DiscussionPreviews threads={threads} onDeleteThread={handleDeleteThread} currentUid={userId} /> {/* Pass fetched threads */}
       </div>
       <Footer />
     </div>

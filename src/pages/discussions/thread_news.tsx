@@ -4,6 +4,7 @@ import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
 import { Link, useParams } from 'react-router-dom';
 import CommentForm from '../../components/discussion/Commentform';
+import { getAuth } from 'firebase/auth';
 
 function ThreadNewsDetails() {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +14,7 @@ function ThreadNewsDetails() {
     content: string;
     author: string;
     date: string;
+    uid: string; // Add uid to the Comment interface
   }
 
   interface Thread {
@@ -26,6 +28,20 @@ function ThreadNewsDetails() {
 
   const [thread, setThread] = useState<Thread | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [userUid, setUserUid] = useState<string | null>(null); // Track the current user's UID
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        setUserUid(user.uid); // Set the user's UID when they sign in
+      } else {
+        setUserUid(null); // Clear the user's UID when they sign out
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchThread = async () => {
@@ -60,7 +76,7 @@ function ThreadNewsDetails() {
   }, [id]);
 
   const handleAddComment = async (commentText: string) => {
-    if (!thread) return;
+    if (!thread || !userUid) return; // Ensure there's a thread and a user is logged in
 
     const author = localStorage.getItem('username') || "Anonymous";
     const date = new Date().toISOString().split('T')[0];
@@ -75,6 +91,7 @@ function ThreadNewsDetails() {
           author,
           content: commentText,
           date,
+          uid: userUid, // Include the user's UID in the comment
         }),
       });
 
@@ -84,10 +101,29 @@ function ThreadNewsDetails() {
 
       const data = await response.json();
       const newComment = data.comment;
-      
+
       setComments(prevComments => [...prevComments, newComment]);
     } catch (error) {
       console.error('Error adding comment:', error);
+      // Optionally show error message to user
+    }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!thread || !userUid) return; // Ensure there's a thread and a user is logged in
+
+    try {
+      const response = await fetch(`http://localhost:5000/news/comment/${id}/${commentId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete comment: ${response.status}`);
+      }
+
+      setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
+    } catch (error) {
+      console.error('Error deleting comment:', error);
       // Optionally show error message to user
     }
   };
@@ -99,7 +135,7 @@ function ThreadNewsDetails() {
   return (
     <div className="discussion-page">
       <Header />
-      <div style={{marginTop: '100px'}}></div>
+      <div style={{ marginTop: '100px' }}></div>
       <div className="discussion-container">
         {/* Breadcrumb Navigation */}
         <nav className="breadcrumb">
@@ -129,6 +165,10 @@ function ThreadNewsDetails() {
                   <strong>{comment.author}:</strong> {comment.content}
                 </p>
                 <span className="comment-date">{comment.date}</span>
+                {/* Conditionally render the delete button */}
+                {userUid === comment.uid && (
+                  <button onClick={() => handleDeleteComment(comment.commentId)}>Delete</button>
+                )}
               </div>
             ))
           ) : (

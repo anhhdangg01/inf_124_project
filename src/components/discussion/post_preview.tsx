@@ -4,13 +4,20 @@ import { useNavigate } from 'react-router-dom';
 
 interface Thread {
   id: string;
+  uid: string;
   title: string;
   description: string;
   date: string;
   author: string;
 }
 
-const PostPreviewThreads: React.FC<{ threads: Thread[] }> = ({ threads }) => {
+interface DiscussionPreviewsProps {
+  threads: Thread[];
+  onDeleteThread: (threadId: string, uid: string) => void;
+  currentUid: string | null;
+}
+
+const DiscussionPreviews: React.FC<DiscussionPreviewsProps> = ({ threads, onDeleteThread, currentUid }) => {
   const navigate = useNavigate();
 
   return (
@@ -33,10 +40,13 @@ const PostPreviewThreads: React.FC<{ threads: Thread[] }> = ({ threads }) => {
               <span className="date">Last updated: {thread.date}</span>
             </div>
           </div>
+          {currentUid === thread.uid && (
+            <button onClick={() => onDeleteThread(thread.id, thread.uid)}>Delete Thread</button>
+          )}
         </div>
       ))}
     </div>
   );
 };
 
-export default PostPreviewThreads;
+export default DiscussionPreviews;
