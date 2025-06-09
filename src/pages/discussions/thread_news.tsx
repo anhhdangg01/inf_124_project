@@ -150,7 +150,7 @@ function ThreadNewsDetails() {
                 <p className="discussion-comment">
                   <strong>{comment.author}:</strong> {comment.content}
                 </p>
-                <span className="comment-date">{comment.date}</span>
+                <span className="comment-date">Posted on: {comment.date}</span>
                 <br/>
                 {userUid === comment.uid && (
                   <button className="dele_button" onClick={() => handleDeleteComment(comment.commentId)}>Delete</button>
