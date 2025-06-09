@@ -113,7 +113,6 @@ function Profile() {
 
       <div className="history-panel">
         <MovieHistory />
-        <TVShowHistory />
         <h2>Reviews</h2>
         <div className="reviews-list">
           {loading ? (

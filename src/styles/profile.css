@@ -51,7 +51,6 @@
     grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
     gap: 40px;
     margin-top: 20px;
-    margin-bottom: 100px;
 }
 
 .circle-picture {
