@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import '../styles/auth.css';
 import loginOptions from '../assets/login.png'
@@ -25,37 +26,28 @@ function Auth() {
       } else {
         // Sign up
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        
+
         // Extract username from email (everything before @)
         const username = email.split('@')[0];
-        
+
         // Create current timestamp
         const currentDate = new Date().toISOString();
-        
-        // Create user profile in database
-        const response = await fetch(`http://localhost:5000/profile/create/${userCredential.user.uid}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            Username: username,
-            Joined: currentDate,
-            Last_online: currentDate,
-            movie_list: [],
-            reviews: [],
-            Completed: [],
-            Dropped: [],
-            On_hold: [],
-            Plan_to_watch: [],
-            Watching: [],
-            Rewatched: []
-          })
-        });
 
-        if (!response.ok) {
-          throw new Error('Failed to create user profile');
-        }
+        // Create user profile in Firestore directly
+        const db = getFirestore();
+        await setDoc(doc(db, "Users", userCredential.user.uid), {
+          Username: username,
+          Joined: currentDate,
+          Last_online: currentDate,
+          movie_list: [],
+          reviews: [],
+          Completed: [],
+          Dropped: [],
+          On_hold: [],
+          Plan_to_watch: [],
+          Watching: [],
+          Rewatched: []
+        });
       }
       // Redirect to home page on success
       navigate('/');

@@ -5,6 +5,7 @@ import '../../styles/discussion.css';
 import { Link, useParams } from 'react-router-dom';
 import CommentForm from '../../components/discussion/Commentform';
 import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 function ThreadDetails() {
   const { id } = useParams<{ id: string }>();
@@ -47,16 +48,13 @@ function ThreadDetails() {
   useEffect(() => {
     const fetchThread = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/discussions/post/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch thread');
-        }
-        const data = await response.json();
-        console.log('Fetched thread:', data);
-
-        // Map backend fields to match the Thread interface
+        const db = getFirestore();
+        const threadRef = doc(db, "Disc_Posts", id!);
+        const threadSnap = await getDoc(threadRef);
+        if (!threadSnap.exists()) throw new Error('Thread not found');
+        const data = threadSnap.data();
         const mappedThread = {
-          id: data.id,
+          id: threadSnap.id,
           uid: data.uid,
           author: data.Author,
           date: data.Date,
@@ -64,7 +62,6 @@ function ThreadDetails() {
           description: data.Description,
           comments: data.Comments || [],
         };
-
         setThread(mappedThread);
         setComments(mappedThread.comments);
       } catch (error) {
@@ -82,32 +79,23 @@ function ThreadDetails() {
 
     const author = localStorage.getItem('username') || "Anonymous";
     const date = new Date().toISOString().split('T')[0];
+    const newComment: Comment = {
+      commentId: Date.now().toString(),
+      content: commentText,
+      author,
+      date,
+      uid: userUid,
+    };
 
     try {
-      const response = await fetch(`http://localhost:5000/discussions/post/${id}/comment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          author,
-          uid: userUid,
-          content: commentText,
-          date,
-        }),
+      const db = getFirestore();
+      const threadRef = doc(db, "Disc_Posts", id!);
+      await updateDoc(threadRef, {
+        Comments: arrayUnion(newComment),
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to add comment: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const newComment = data.comment;
-
       setComments(prevComments => [...prevComments, newComment]);
     } catch (error) {
       console.error('Error adding comment:', error);
-      // Optionally show error message to user
     }
   };
 
@@ -115,21 +103,16 @@ function ThreadDetails() {
     if (!thread || !userUid) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/discussions/comment/${id}/${commentId}/${userUid}`,
-        {
-          method: 'DELETE',
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to delete comment: ${response.status}`);
-      }
-
-      setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
+      const db = getFirestore();
+      const threadRef = doc(db, "Disc_Posts", id!);
+      const threadSnap = await getDoc(threadRef);
+      if (!threadSnap.exists()) return;
+      const data = threadSnap.data();
+      const updatedComments = (data.Comments || []).filter((comment: Comment) => comment.commentId !== commentId || comment.uid !== userUid);
+      await updateDoc(threadRef, { Comments: updatedComments });
+      setComments(updatedComments);
     } catch (error) {
       console.error('Error deleting comment:', error);
-      // Optionally show error message to user
     }
   };
 
@@ -169,9 +152,10 @@ function ThreadDetails() {
                 <p className="discussion-comment">
                   <strong>{comment.author}:</strong> {comment.content}
                 </p>
-                <span className="comment-date">{comment.date}</span>
+                <span className="comment-date">Posted on: {comment.date}</span>
+                <br />
                 {userUid === comment.uid && (
-                  <button onClick={() => handleDeleteComment(comment.commentId)}>Delete</button>
+                  <button className="dele_button"onClick={() => handleDeleteComment(comment.commentId)}>Delete</button>
                 )}
               </div>
             ))

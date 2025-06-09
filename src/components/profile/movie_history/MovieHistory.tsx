@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../../styles/profile.css';
 import { getMovieDetails, Movie } from '../../../functions/api_service';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 function MovieHistory() {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -15,14 +16,13 @@ function MovieHistory() {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    // Fetch user data from backend
-                    const response = await fetch(`http://localhost:5000/profile/data/${user.uid}`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch user data');
+                    const db = getFirestore();
+                    const userRef = doc(db, "Users", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    if (!userSnap.exists()) {
+                        throw new Error('User not found');
                     }
-                    const userData = await response.json();
-
-                    // Extract movie_list (change this to your actual field name if needed)
+                    const userData = userSnap.data();
                     const movieIds: number[] = userData.movie_list || [];
 
                     // Fetch details for each movie

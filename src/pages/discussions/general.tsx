@@ -5,6 +5,7 @@ import Footer from '../../components/footer/footer';
 import '../../styles/discussion.css';
 import DiscussionPreviews from '../../components/discussion/post_preview';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, getDoc } from 'firebase/firestore';
 
 interface Thread {
   id: string;
@@ -20,37 +21,32 @@ function GeneralDiscussion() {
   const [userId, setUserId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [threads, setThreads] = useState<Thread[]>([]); // Initialize as an empty array
+  const [threads, setThreads] = useState<Thread[]>([]);
   const navigate = useNavigate();
 
-  // Fetch threads from the backend API
+  // Fetch threads from Firestore
+  const fetchThreads = async () => {
+    try {
+      const db = getFirestore();
+      const querySnapshot = await getDocs(collection(db, "Disc_Posts"));
+      const mappedThreads = querySnapshot.docs.map(docSnap => {
+        const data = docSnap.data();
+        return {
+          id: docSnap.id,
+          uid: data.uid,
+          author: data.Author,
+          date: data.Date,
+          title: data.Title,
+          description: data.Description
+        };
+      });
+      setThreads(mappedThreads);
+    } catch (error) {
+      console.error('Error fetching threads:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchThreads = async () => {
-      try {
-        console.log('Fetching threads from backend...');
-        const response = await fetch('http://localhost:5000/discussions/posts');
-        if (!response.ok) {
-          throw new Error('Failed to fetch threads');
-        }
-        const data = await response.json();
-
-        // Map backend fields to match the Thread interface
-        const mappedThreads = data.map((thread: any) => ({
-          id: thread.id,
-          uid: thread.uid,
-          author: thread.Author,
-          date: thread.Date,
-          title: thread.Title,
-          description: thread.Description
-          
-        }));
-
-        setThreads(mappedThreads);
-      } catch (error) {
-        console.error('Error fetching threads:', error);
-      }
-    };
-
     fetchThreads();
 
     const auth = getAuth();
@@ -77,55 +73,17 @@ function GeneralDiscussion() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/discussions/posting', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          Author: username || 'Anonymous',
-          uid: userId,
-          Date: new Date().toISOString().split('T')[0],
-          Comments: [],
-          Title: title,
-          Description: description,
-        }),
+      const db = getFirestore();
+      await addDoc(collection(db, "Disc_Posts"), {
+        Author: username || 'Anonymous',
+        uid: userId,
+        Date: new Date().toISOString().split('T')[0],
+        Comments: [],
+        Title: title,
+        Description: description,
       });
 
-      if (!response.ok) {
-        throw new Error(`Failed to create thread: ${response.status}`);
-      }
-      const responseData = await response.json();
-      console.log('Thread created successfully:', responseData);
-      const fetchThreads = async () => {
-        try {
-          console.log('Fetching threads from backend...');
-          const response = await fetch('http://localhost:5000/discussions/posts');
-          if (!response.ok) {
-            throw new Error('Failed to fetch threads');
-          }
-          const data = await response.json();
-
-          // Map backend fields to match the Thread interface
-          const mappedThreads = data.map((thread: any) => ({
-            id: thread.id,
-            uid: thread.uid,
-            author: thread.Author,
-            date: thread.Date,
-            title: thread.Title,
-            description: thread.Description
-            
-          }));
-
-          setThreads(mappedThreads);
-        } catch (error) {
-          console.error('Error fetching threads:', error);
-        }
-      };
-
-      fetchThreads();
-
-      // Clear the form fields
+      await fetchThreads();
       setTitle('');
       setDescription('');
     } catch (error) {
@@ -135,42 +93,23 @@ function GeneralDiscussion() {
 
   const handleDeleteThread = async (threadId: string, uid: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/discussions/post/${threadId}/${uid}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to delete thread: ${response.status}`);
+      if (!userId || userId !== uid) {
+        alert('You can only delete your own threads.');
+        return;
       }
-
-      // Refresh the threads list after successful deletion
-      const fetchThreads = async () => {
-        try {
-          console.log('Fetching threads from backend...');
-          const response = await fetch('http://localhost:5000/discussions/posts');
-          if (!response.ok) {
-            throw new Error('Failed to fetch threads');
-          }
-          const data = await response.json();
-
-          // Map backend fields to match the Thread interface
-          const mappedThreads = data.map((thread: any) => ({
-            id: thread.id,
-            uid: thread.uid,
-            author: thread.Author,
-            date: thread.Date,
-            title: thread.Title,
-            description: thread.Description
-            
-          }));
-
-          setThreads(mappedThreads);
-        } catch (error) {
-          console.error('Error fetching threads:', error);
-        }
-      };
-
-      fetchThreads();
+      const db = getFirestore();
+      const threadRef = doc(db, "Disc_Posts", threadId);
+      const threadSnap = await getDoc(threadRef);
+      if (!threadSnap.exists()) {
+        alert('Thread not found.');
+        return;
+      }
+      if (threadSnap.data().uid !== userId) {
+        alert('Unauthorized: You are not allowed to delete this post.');
+        return;
+      }
+      await deleteDoc(threadRef);
+      await fetchThreads();
     } catch (error) {
       console.error('Error deleting thread:', error);
     }
@@ -216,7 +155,7 @@ function GeneralDiscussion() {
             <button className="create-thread-btn">CREATE THREAD</button>
           </form>
         </main>
-        <DiscussionPreviews threads={threads} onDeleteThread={handleDeleteThread} currentUid={userId} /> {/* Pass fetched threads */}
+        <DiscussionPreviews threads={threads} onDeleteThread={handleDeleteThread} currentUid={userId} />
       </div>
       <Footer />
     </div>

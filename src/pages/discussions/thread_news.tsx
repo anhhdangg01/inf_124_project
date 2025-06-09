@@ -5,6 +5,7 @@ import '../../styles/discussion.css';
 import { Link, useParams } from 'react-router-dom';
 import CommentForm from '../../components/discussion/Commentform';
 import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 function ThreadNewsDetails() {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +15,7 @@ function ThreadNewsDetails() {
     content: string;
     author: string;
     date: string;
-    uid: string; // Add uid to the Comment interface
+    uid: string;
   }
 
   interface Thread {
@@ -28,15 +29,15 @@ function ThreadNewsDetails() {
 
   const [thread, setThread] = useState<Thread | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
-  const [userUid, setUserUid] = useState<string | null>(null); // Track the current user's UID
+  const [userUid, setUserUid] = useState<string | null>(null);
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        setUserUid(user.uid); // Set the user's UID when they sign in
+        setUserUid(user.uid);
       } else {
-        setUserUid(null); // Clear the user's UID when they sign out
+        setUserUid(null);
       }
     });
 
@@ -46,23 +47,19 @@ function ThreadNewsDetails() {
   useEffect(() => {
     const fetchThread = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/news/post/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch thread');
-        }
-        const data = await response.json();
-        console.log('Fetched thread:', data);
-
-        // Map backend fields to match the Thread interface
+        const db = getFirestore();
+        const threadRef = doc(db, "News_Posts", id!);
+        const threadSnap = await getDoc(threadRef);
+        if (!threadSnap.exists()) throw new Error('Thread not found');
+        const data = threadSnap.data();
         const mappedThread = {
-          id: data.id,
+          id: threadSnap.id,
           author: data.Author,
           date: data.Date,
           title: data.Title,
           description: data.Description,
           comments: data.Comments || [],
         };
-
         setThread(mappedThread);
         setComments(mappedThread.comments);
       } catch (error) {
@@ -76,55 +73,44 @@ function ThreadNewsDetails() {
   }, [id]);
 
   const handleAddComment = async (commentText: string) => {
-    if (!thread || !userUid) return; // Ensure there's a thread and a user is logged in
+    if (!thread || !userUid) return;
 
     const author = localStorage.getItem('username') || "Anonymous";
     const date = new Date().toISOString().split('T')[0];
+    const newComment: Comment = {
+      commentId: Date.now().toString(),
+      content: commentText,
+      author,
+      date,
+      uid: userUid,
+    };
 
     try {
-      const response = await fetch(`http://localhost:5000/news/post/${id}/comment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          author,
-          content: commentText,
-          date,
-          uid: userUid, // Include the user's UID in the comment
-        }),
+      const db = getFirestore();
+      const threadRef = doc(db, "News_Posts", id!);
+      await updateDoc(threadRef, {
+        Comments: arrayUnion(newComment),
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to add comment: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const newComment = data.comment;
-
       setComments(prevComments => [...prevComments, newComment]);
     } catch (error) {
       console.error('Error adding comment:', error);
-      // Optionally show error message to user
     }
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (!thread || !userUid) return; // Ensure there's a thread and a user is logged in
+    if (!thread || !userUid) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/news/comment/${id}/${commentId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to delete comment: ${response.status}`);
-      }
-
-      setComments(prevComments => prevComments.filter(comment => comment.commentId !== commentId));
+      const db = getFirestore();
+      const threadRef = doc(db, "News_Posts", id!);
+      const threadSnap = await getDoc(threadRef);
+      if (!threadSnap.exists()) return;
+      const data = threadSnap.data();
+      const updatedComments = (data.Comments || []).filter((comment: Comment) => comment.commentId !== commentId || comment.uid !== userUid);
+      await updateDoc(threadRef, { Comments: updatedComments });
+      setComments(updatedComments);
     } catch (error) {
       console.error('Error deleting comment:', error);
-      // Optionally show error message to user
     }
   };
 
@@ -165,9 +151,9 @@ function ThreadNewsDetails() {
                   <strong>{comment.author}:</strong> {comment.content}
                 </p>
                 <span className="comment-date">{comment.date}</span>
-                {/* Conditionally render the delete button */}
+                <br/>
                 {userUid === comment.uid && (
-                  <button onClick={() => handleDeleteComment(comment.commentId)}>Delete</button>
+                  <button className="dele_button" onClick={() => handleDeleteComment(comment.commentId)}>Delete</button>
                 )}
               </div>
             ))

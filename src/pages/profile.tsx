@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc, arrayRemove, deleteDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import '../styles/auth.css';
 import Header from '../components/header/header';
 import Footer from '../components/footer/footer';
@@ -8,7 +9,7 @@ import TVShowStats from '../components/profile/tv_show_stats/TVShowStats';
 import MovieStats from '../components/profile/movie_stats/MovieStats';
 import TVShowHistory from '../components/profile/tv_show_history/TVShowHistory';
 import MovieHistory from '../components/profile/movie_history/MovieHistory';
-import Reviews from '../components/profile/review_display/MovieReviewCard';
+import MovieReviewCard from '../components/profile/review_display/MovieReviewCard';
 
 interface Review {
   id: string;
@@ -21,62 +22,81 @@ function Profile() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      setLoading(true);
-      try {
-        const user = getAuth().currentUser;
-        if (!user) return;
-
-        // 1. Fetch review IDs
-        const res = await fetch(`http://localhost:5000/profile/reviews/${user.uid}`);
-        const reviewIds = await res.json();
-
-        // 2. Fetch each review's data
-        const reviewData: Review[] = await Promise.all(
-          reviewIds.map(async (review: any) => {
-            // If your /profile/reviews/:uid already returns full review objects, skip this fetch
-            if (review.id && review.movieId) return review;
-            const r = await fetch(`http://localhost:5000/reviews/review/${review}`);
-            return await r.json();
-          })
-        );
-
-        setReviews(reviewData);
-      } catch (err) {
-        console.error('Failed to fetch reviews', err);
+  // Helper to fetch reviews for the current user
+  const fetchReviews = async (user: any) => {
+    setLoading(true);
+    try {
+      const db = getFirestore();
+      const userRef = doc(db, "Users", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists()) {
+        setReviews([]);
+        setLoading(false);
+        return;
       }
-      setLoading(false);
-    };
+      const userData = userSnap.data();
+      const reviewIds: string[] = userData.reviews || [];
 
-    fetchReviews();
+      // Fetch each review document
+      const fetchedReviews: Review[] = [];
+      for (const reviewId of reviewIds) {
+        const reviewRef = doc(db, "Reviews", reviewId);
+        const reviewSnap = await getDoc(reviewRef);
+        if (reviewSnap.exists()) {
+          const data = reviewSnap.data();
+          fetchedReviews.push({
+            id: reviewSnap.id,
+            movieId: data.movieId,
+            content: data.content,
+            rating: data.rating,
+          });
+        }
+      }
+      setReviews(fetchedReviews);
+    } catch (err) {
+      console.error('Failed to fetch reviews', err);
+      setReviews([]);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
+      if (!user) {
+        setReviews([]);
+        setLoading(false);
+        return;
+      }
+      await fetchReviews(user);
+    });
+    return () => unsubscribe();
   }, []);
 
-  // Remove review from backend and update state
+  // Remove review from Firestore and update state
   const removeReview = async (docId: string) => {
     const user = getAuth().currentUser;
     if (!user) return;
 
     try {
+      const db = getFirestore();
       // 1. Delete review from Reviews collection
-      const response = await fetch(`http://localhost:5000/reviews/${docId}/${user.uid}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) throw new Error('Failed to delete review');
-
+      await deleteDoc(doc(db, "Reviews", docId));
       // 2. Remove reviewId from user's profile
-      await fetch(`http://localhost:5000/profile/update/${user.uid}/remove_review`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reviewId: docId }),
-      });
-
-      // 3. Update UI
-      setReviews(reviews.filter((review) => review.id !== docId));
-      alert('Review deleted successfully!');
+      const userRef = doc(db, "Users", user.uid);
+      await updateDoc(userRef, { reviews: arrayRemove(docId) });
+      // 3. Refetch reviews
+      await fetchReviews(user);
     } catch (err) {
       alert('Failed to delete review.');
       console.error(err);
+    }
+  };
+
+  // Handler to refetch reviews after editing
+  const handleReviewEdited = async () => {
+    const user = getAuth().currentUser;
+    if (user) {
+      await fetchReviews(user);
     }
   };
 
@@ -87,28 +107,28 @@ function Profile() {
       <div className="stats-section">
         <UserStats />
         <div className="stats-panel">
-          <TVShowStats />
           <MovieStats />
         </div>
       </div>
 
       <div className="history-panel">
-        <TVShowHistory />
         <MovieHistory />
+        <TVShowHistory />
         <h2>Reviews</h2>
         <div className="reviews-list">
           {loading ? (
             <p>Loading...</p>
           ) : (
             reviews.map((review) => (
-              <div key={review.id}>
-                <Reviews
-                  movieId={review.movieId}
-                  review={review.content}
-                  rating={review.rating}
-                />
-                <button onClick={() => removeReview(review.id)}>Delete</button>
-              </div>
+              <MovieReviewCard
+                key={review.id}
+                id={review.id}
+                movieId={review.movieId}
+                review={review.content}
+                rating={review.rating}
+                onDelete={() => removeReview(review.id)}
+                onEdit={handleReviewEdited} // Pass this prop!
+              />
             ))
           )}
         </div>

@@ -41,7 +41,7 @@ const DiscussionPreviews: React.FC<DiscussionPreviewsProps> = ({ threads, onDele
             </div>
           </div>
           {currentUid === thread.uid && (
-            <button onClick={() => onDeleteThread(thread.id, thread.uid)}>Delete Thread</button>
+            <button className='del_button'onClick={() => onDeleteThread(thread.id, thread.uid)}>Delete Thread</button>
           )}
         </div>
       ))}

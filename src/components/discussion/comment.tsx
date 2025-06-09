@@ -26,7 +26,7 @@ const styles = {
         margin: 0,
         fontSize: '14px',
         color: '#333',
-    },
+    }
 };
 
 export default Comment;

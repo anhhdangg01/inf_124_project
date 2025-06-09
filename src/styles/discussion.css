@@ -288,6 +288,8 @@ p {
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #333333;
+  margin-bottom:  20px;
 }
 
 .rules-section {
@@ -340,4 +342,49 @@ p {
 
 .rules-contact-link:hover {
   text-decoration: underline;
+}
+
+.del_button {
+    background: #e53935;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-left: 8px;
+    box-shadow: 0 2px 8px rgba(229,57,53,0.08);
+}
+
+.del_button:hover {
+    background: #b71c1c;
+    box-shadow: 0 4px 16px rgba(229,57,53,0.16);
+}
+
+.comment-date{
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 0.5rem;
+}
+
+.dele_button {
+    background: #e53935;
+    position: relative;
+    left: 88%;
+    right: 0;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-left: 8px;
+    box-shadow: 0 2px 8px rgba(229,57,53,0.08);
+}
+
+.dele_button:hover {
+    background: #b71c1c;
+    box-shadow: 0 4px 16px rgba(229,57,53,0.16);
 }
